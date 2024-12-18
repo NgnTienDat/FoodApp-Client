@@ -17,10 +17,18 @@ import RestaurantCategoryFood from '../components/restaurant/RestaurantCategoryF
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
-const MenuStackNavigator = () => {
-    return (
+const MenuStackNavigator = ({ navigation }) => {
+    React.useEffect(() => {
+        navigation.getParent()?.setOptions({
+            tabBarStyle: { display: 'none' }
+        });
+        return () => navigation.getParent()?.setOptions({
+            tabBarStyle: { display: 'flex' }
+        });
+    }, [navigation]);
 
-        <Stack.Navigator >
+    return (
+        <Stack.Navigator>
             <Stack.Screen name="index" component={RestaurantMenu} options={{ title: 'Thực đơn' }} />
             <Stack.Screen name="menu" component={RestaurantFood} options={{ title: 'Món ăn' }} />
             <Stack.Screen name="sale_schedule" component={RestaurantSaleSchedule} options={{ title: 'Lịch bán' }} />
@@ -44,8 +52,8 @@ const StackNavigator = () => {
 }
 const RestaurantNavigation = () => {
     return (
-        <Tab.Navigator>
-            <Tab.Screen name="index" component={StackNavigator} options={{ headerShown: false, title: 'Trang chủ', tabBarIcon: () => <Icon source="store-outline" size={30} /> }} />
+        <Tab.Navigator >
+            <Tab.Screen name="index" component={StackNavigator} options={{ headerShown: false, title: 'Trang chủ', tabBarIcon: () => <Icon source="home-outline" size={30} /> }} />
             <Tab.Screen name="profile" component={RestaurantIncome} options={{ title: 'Thu nhập', tabBarIcon: () => <Icon source="wallet-outline" size={30} /> }} />
             <Tab.Screen name="income" component={RestaurantProfile} options={{ headerShown: false, title: 'Tôi', tabBarIcon: () => <Icon source="account-outline" size={30} /> }} />
         </Tab.Navigator>

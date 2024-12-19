@@ -4,7 +4,6 @@ import RestaurantStyles from "../../styles/RestaurantStyles";
 import CustomerStyles from '../../styles/CustomerStyles';
 import { useState, useEffect } from "react";
 import RestaurantAPIs, { endpoints } from "../../config/RestaurantAPIs";
-import { debounce } from "lodash";
 
 const RestaurantFood = () => {
     const [loading, setLoading] = useState(false)

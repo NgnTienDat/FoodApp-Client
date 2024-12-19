@@ -59,9 +59,9 @@ export default StyleSheet.create({
         fontWeight: 'bold'
     },
     containerCardMenu: {
-        flexDirection: 'row', alignItems: 'center', marginBottom: 20, backgroundColor: '#fff', padding: 10, borderRadius: 8
+        flexDirection: 'row', alignItems: 'center', marginBottom: 10, backgroundColor: '#fff', padding: 8, borderRadius: 8
     }, cardChoiceName: {
-        fontSize: 20,
+        fontSize: 16,
         margin: 10
     }
 

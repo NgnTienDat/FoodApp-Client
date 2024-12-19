@@ -24,9 +24,9 @@ export const HomeHeader = () => {
                     <Icon source="chevron-right" size={20} color="#000" />
                 </View>
             </TouchableOpacity>
+            
 
-
-            <View style={CustomerStyles.searchContainer}>
+            <View style={CustomerStyles.homeHeaderContainer}>
                 <Icon source="magnify" size={20} color="#666" />
                 <TouchableOpacity onPress={() => nav.navigate('SearchEngine')}>
                     

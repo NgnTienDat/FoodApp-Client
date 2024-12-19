@@ -7,7 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 
 const AccountScreen = () => {
 
-    const nav =useNavigation()
+    const nav = useNavigation()
 
     return (
         <SafeAreaView style={CustomerStyles.safeArea}>
@@ -36,9 +36,11 @@ const AccountScreen = () => {
                 <TouchableOpacity style={CustomerStyles.logoutButton}>
                     <Text style={CustomerStyles.logoutText}>Đăng xuất</Text>
                 </TouchableOpacity>
-
+                <TouchableOpacity style={CustomerStyles.logoutButton} onPress={() => nav.navigate('LoginScreen')}>
+                    <Text style={CustomerStyles.logoutText}>Đăng nhập</Text>
+                </TouchableOpacity>
             </View>
-            
+
         </SafeAreaView>
     )
 }

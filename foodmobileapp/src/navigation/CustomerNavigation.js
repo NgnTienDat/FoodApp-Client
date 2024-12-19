@@ -11,6 +11,7 @@ import HomeScreenTest from '../screens/customer/test';
 import SearchScreen from '../screens/customer/SearchScreen';
 import FollowScreen from '../screens/customer/FollowScreen';
 import OrderScreen from '../screens/customer/OrderScreen';
+import LoginScreen from '../screens/auth/Login';
 
 
 const Stack = createNativeStackNavigator()
@@ -19,7 +20,6 @@ const HomeStackNavigator = () => {
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name='HomeScreen' component={HomeScreen} />
-            <Stack.Screen name='SearchEngine' t component={SearchScreen} options={{ title: 'Tìm kiếm', headerShown: true}}/>
 
         </Stack.Navigator>
     )
@@ -84,6 +84,9 @@ const RootNavigator = () => {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name="MainTabs" component={TabNavigator} />
             <Stack.Screen  name='MyRestaurant' component={RestaurantNavigation} options={{ headerShown: false}}/>
+            <Stack.Screen name='LoginScreen' component={LoginScreen} options={{ title: 'Đăng nhập', headerShown: true}}/>
+            <Stack.Screen name='SearchEngine' t component={SearchScreen} options={{ title: 'Tìm kiếm', headerShown: true}}/>
+
         </Stack.Navigator>
     )
 }

@@ -63,6 +63,27 @@ export default StyleSheet.create({
     }, cardChoiceName: {
         fontSize: 16,
         margin: 10
-    }
+    },
+    addBtn: {
+        backgroundColor: '#EE4D2D',
+        margin: 10,
+    },
+    inputMargin: {
+        margin: 10,
+        borderColor: '#EE4D2D',
+    },
+    dropDownStyle: {
+        margin: 5,
+        paddingHorizontal: 5,
+
+    },
+    groupBtn: {
+        flexDirection: 'row',
+    },
+    deleteBtn: {
+        backgroundColor: 'red',
+        margin: 10,
+    },
+
 
 });

@@ -12,6 +12,8 @@ import SearchScreen from '../screens/customer/SearchScreen';
 import FollowScreen from '../screens/customer/FollowScreen';
 import OrderScreen from '../screens/customer/OrderScreen';
 import LoginScreen from '../screens/auth/Login';
+import RegisterScreen from '../screens/auth/Register';
+import RestaurantRegisterScreen from '../screens/auth/RestaurantRegister';
 
 
 const Stack = createNativeStackNavigator()
@@ -86,6 +88,8 @@ const RootNavigator = () => {
             <Stack.Screen  name='MyRestaurant' component={RestaurantNavigation} options={{ headerShown: false}}/>
             <Stack.Screen name='LoginScreen' component={LoginScreen} options={{ title: 'Đăng nhập', headerShown: true}}/>
             <Stack.Screen name='SearchEngine' t component={SearchScreen} options={{ title: 'Tìm kiếm', headerShown: true}}/>
+            <Stack.Screen name='RegisterScreen' t component={RegisterScreen} options={{ title: 'Đăng ký', headerShown: true}}/>
+            <Stack.Screen name='RestaurantRegisterScreen' t component={RestaurantRegisterScreen} options={{ title: 'Đăng ký nhà hàng', headerShown: true}}/>
 
         </Stack.Navigator>
     )

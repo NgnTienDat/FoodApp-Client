@@ -183,12 +183,14 @@ export default StyleSheet.create({
     backgroundColor: "#fff", 
   },
   loginButton: {
+    flexDirection:'row',
     backgroundColor: "#FF5722",
     paddingVertical: 15,
     borderRadius: 8,
     width: "100%",
     alignItems: "center",
     marginBottom: 20,
+    justifyContent:'center'
   }
 
 });

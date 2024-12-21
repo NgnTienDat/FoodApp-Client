@@ -1,9 +1,10 @@
 import { View, Text, TouchableOpacity, RefreshControl, FlatList, ActivityIndicator } from "react-native";
 import RestaurantStyles from "../../styles/RestaurantStyles";
 import { Searchbar, Button } from "react-native-paper";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import RestaurantAPIs, { endpoints } from "../../config/RestaurantAPIs";
 import CustomerStyles from '../../styles/CustomerStyles';
+
 
 const RestaurantCategoryFood = ({ navigation }) => {
     const [loading, setLoading] = useState(false)
@@ -40,8 +41,6 @@ const RestaurantCategoryFood = ({ navigation }) => {
             }
         }
     };
-
-
 
     useEffect(() => {
         let timer = setTimeout(() => loadCategories(), 800);

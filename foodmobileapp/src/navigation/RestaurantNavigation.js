@@ -21,6 +21,16 @@ import DetailFood from '../components/restaurant/DetailFood';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
+const CategoryStackNavigator = ({ navigation }) => {
+    return (
+        <Stack.Navigator>
+            <Stack.Screen name="category_food" component={RestaurantCategoryFood} options={{ headerShown: false }} />
+            <Stack.Screen name="add_category" component={AddCategory} options={{ headerShown: false }} />
+            <Stack.Screen name="detail_category" component={DetailCategory} options={{ headerShown: false }} />
+        </Stack.Navigator>
+    );
+}
+
 
 const MenuStackNavigator = ({ navigation }) => {
     React.useEffect(() => {

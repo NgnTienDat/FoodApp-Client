@@ -1,12 +1,11 @@
 import { View, Text, FlatList, RefreshControl, TouchableOpacity, Image, ActivityIndicator } from "react-native";
-import { Searchbar } from "react-native-paper";
+import { Searchbar, Button } from "react-native-paper";
 import RestaurantStyles from "../../styles/RestaurantStyles";
 import CustomerStyles from '../../styles/CustomerStyles';
 import { useState, useEffect } from "react";
 import RestaurantAPIs, { endpoints } from "../../config/RestaurantAPIs";
-import { debounce } from "lodash";
 
-const RestaurantFood = () => {
+const RestaurantFood = ({ navigation }) => {
     const [loading, setLoading] = useState(false)
     const restaurantId = 1
     const [page, setPage] = useState(1);
@@ -24,7 +23,6 @@ const RestaurantFood = () => {
                 console.info(url)
 
                 let res = await RestaurantAPIs.get(url);
-                console.info(res.data.next)
 
                 if (page > 1)
                     setFoods(current_res => [...current_res, ...res.data])
@@ -64,7 +62,7 @@ const RestaurantFood = () => {
     }
 
     return (
-        <View>
+        <View style={{ flex: 1 }}>
             <View style={RestaurantStyles.dishCard}>
                 <Searchbar style={CustomerStyles.searchInput} placeholder="Món ăn cần tìm"
                     placeholderTextColor="#999"
@@ -79,7 +77,9 @@ const RestaurantFood = () => {
                 data={foods}
                 keyExtractor={(item, index) => `food-${item.id}-${index}`}
                 renderItem={({ item }) => (
-                    <TouchableOpacity style={[RestaurantStyles.dishCard]} key={`${item.id}-${Math.random()}`}>
+                    <TouchableOpacity style={[RestaurantStyles.dishCard]}
+                        key={`${item.id}-${Math.random()}`}
+                        onPress={() => navigation.navigate('detail_food')}>
                         <Image source={{ uri: item.image }} style={RestaurantStyles.dishImage} />
                         <View style={{ flexDirection: 'column', justifyContent: 'space-between', paddingLeft: 10 }}>
                             <Text style={RestaurantStyles.dishName}>{item.name}</Text>
@@ -88,7 +88,14 @@ const RestaurantFood = () => {
                         </View>
                     </TouchableOpacity>
                 )}
+                refreshing={loading}
+                onRefresh={loadFoods}
             />
+
+            <Button icon="plus" mode="contained" style={[RestaurantStyles.addBtn]}
+                onPress={() => navigation.navigate('add_food')}>
+                Thêm món ăn mới
+            </Button>
         </View>
     );
 }

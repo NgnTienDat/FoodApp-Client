@@ -25,9 +25,9 @@ const RestaurantFood = ({ navigation }) => {
                 let res = await RestaurantAPIs.get(url);
 
                 if (page > 1)
-                    setFoods(current_res => [...current_res, ...res.data])
+                    setFoods(current_res => [...current_res, ...res.data.results])
                 else
-                    setFoods(res.data)
+                    setFoods(res.data.results)
 
                 if (!res.data.next) {
                     setPage(0);
@@ -79,7 +79,10 @@ const RestaurantFood = ({ navigation }) => {
                 renderItem={({ item }) => (
                     <TouchableOpacity style={[RestaurantStyles.dishCard]}
                         key={`${item.id}-${Math.random()}`}
-                        onPress={() => navigation.navigate('detail_food')}>
+                        onPress={() => navigation.navigate('detail_food', {
+                            foodId: item.id,
+                            onGoBack: () => refresh(),
+                        })}>
                         <Image source={{ uri: item.image }} style={RestaurantStyles.dishImage} />
                         <View style={{ flexDirection: 'column', justifyContent: 'space-between', paddingLeft: 10 }}>
                             <Text style={RestaurantStyles.dishName}>{item.name}</Text>
@@ -93,7 +96,9 @@ const RestaurantFood = ({ navigation }) => {
             />
 
             <Button icon="plus" mode="contained" style={[RestaurantStyles.addBtn]}
-                onPress={() => navigation.navigate('add_food')}>
+                onPress={() => navigation.navigate('add_food', {
+                    onGoBack: () => refresh(), // Gọi lại khi quay về
+                })}>
                 Thêm món ăn mới
             </Button>
         </View>

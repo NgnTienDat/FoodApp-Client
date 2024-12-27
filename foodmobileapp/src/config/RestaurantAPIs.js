@@ -12,6 +12,7 @@ export const endpoints = {
     createCategory: restaurantId => `/restaurants/${restaurantId}/create_category/`,
     detailCategory: categoryId => `/restaurant_categories/${categoryId}/`,
     createFood: restaurantId => `/restaurants/${restaurantId}/create_food/`,
+    detailFood: foodId => `/foods/${foodId}/`,
 };
 
 const RestaurantAPIs = axios.create({

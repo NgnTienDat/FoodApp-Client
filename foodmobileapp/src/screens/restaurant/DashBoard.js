@@ -33,9 +33,9 @@ const DashBoard = ({ navigation }) => {
                 setLoading(true)
                 let res = await RestaurantAPIs.get(url)
                 if (page > 1)
-                    setFoods(current_res => [...current_res, ...res.data])
+                    setFoods(current_res => [...current_res, ...res.data.results])
                 else
-                    setFoods(res.data)
+                    setFoods(res.data.results)
 
                 if (!res.data.next) {
                     setPage(0);

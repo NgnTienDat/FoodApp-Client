@@ -35,12 +35,16 @@ export default StyleSheet.create({
     paddingTop: 50
   },
   container_account_header: {
-    backgroundColor: '#EE4D2D', // Shopee orange color
-    padding: 50,
+    backgroundColor: '#EE4D2D',
+    padding: 20,
 
   },
   addressContainer: {
-    marginBottom: 8,
+    marginBottom: 8, 
+
+  },
+  accountHeaderContainer: {
+    marginBottom: 8, flexDirection: 'row'
 
   },
   deliverText: {
@@ -59,7 +63,7 @@ export default StyleSheet.create({
     fontSize: 14,
     fontWeight: '500',
   },
-  searchContainer: {
+  homeHeaderContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#fff',
@@ -71,11 +75,32 @@ export default StyleSheet.create({
     borderWidth: 1, borderRadius: 8,
     margin: 5
   },
-  searchInput: {
+  searchBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#e0dcdc',
+    paddingHorizontal: 20,
+    height: 40,
+    borderColor: '#d8d8d8',
+    borderWidth: 0, borderRadius: 8,
+    margin: 5, width: '70%'
+  },
+  searcherContainer: {
+    flexDirection: 'row',
+
+
+  },
+  searchText: {
     flex: 1,
     marginLeft: 8,
     fontSize: 14,
     color: '#000',
+
+
+  },
+  cancelInput: {
+    borderRadius: 8, margin: 5,
+    marginLeft: 1, width: '10%', alignItems: 'center', justifyContent: 'center'
 
   },
   safeArea: {
@@ -148,6 +173,7 @@ export default StyleSheet.create({
     width: 100, height: 100, borderRadius: 5
   },
   filterButton: {
+    marginTop: 10,
     borderWidth: 1,
     borderColor: '#ccc',
     paddingVertical: 7,
@@ -155,5 +181,21 @@ export default StyleSheet.create({
     borderRadius: 5,
     alignSelf: 'center', backgroundColor: '#EE4D2D', width: 150
   },
+  loginInput: {
+    width: "100%",
+    marginBottom: 20,
+    backgroundColor: "#fff", 
+  },
+  loginButton: {
+    flexDirection:'row',
+    backgroundColor: "#FF5722",
+    paddingVertical: 15,
+    borderRadius: 8,
+    width: "100%",
+    alignItems: "center",
+    marginBottom: 20,
+    justifyContent:'center'
+  }
 
 });
+

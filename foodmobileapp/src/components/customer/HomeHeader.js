@@ -24,9 +24,9 @@ export const HomeHeader = () => {
                     <Icon source="chevron-right" size={20} color="#000" />
                 </View>
             </TouchableOpacity>
+            
 
-
-            <View style={CustomerStyles.searchContainer}>
+            <View style={CustomerStyles.homeHeaderContainer}>
                 <Icon source="magnify" size={20} color="#666" />
                 <TouchableOpacity onPress={() => nav.navigate('SearchEngine')}>
                     
@@ -81,49 +81,3 @@ export const MainCategory = () => {
     )
 }
 
-// export const renderHorizontalItems = () => {
-//     return (
-//         <View>
-//             <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ height: 100, backgroundColor: '#f0f0f0', paddingVertical: 10, }}>
-//                 {Array.from({ length: 10 }).map((_, index) => (
-//                     <View key={index} style={{
-//                         width: 80,
-//                         height: 80,
-//                         marginHorizontal: 5,
-//                         backgroundColor: '#007AFF',
-//                         justifyContent: 'center',
-//                         alignItems: 'center',
-//                         borderRadius: 5,
-//                     }}>
-//                         <Text style={{
-//                             color: '#fff',
-//                             fontWeight: 'bold',
-//                         }}>H{index + 1}</Text>
-//                     </View>
-//                 ))}
-//             </ScrollView>
-//             <Text style={CustomerStyles.nearRestaurant}>
-//                 Quán ngon gần bạn
-//             </Text>
-//         </View>
-//     );
-// };
-
-// export const renderVerticalItem = ({ item }) => {
-//     return (
-//         <View style={{
-//             width: Dimensions.get('window').width - 20,
-//             height: 80,
-//             marginVertical: 5,
-//             backgroundColor: '#FF9500',
-//             justifyContent: 'center',
-//             alignItems: 'center',
-//             borderRadius: 5,
-//         }}>
-//             <Text style={{
-//                 color: '#fff',
-//                 fontWeight: 'bold',
-//             }}>V{item + 1}</Text>
-//         </View>
-//     );
-// };

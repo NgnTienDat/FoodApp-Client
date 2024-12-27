@@ -40,7 +40,11 @@ export default StyleSheet.create({
 
   },
   addressContainer: {
-    marginBottom: 8,
+    marginBottom: 8, 
+
+  },
+  accountHeaderContainer: {
+    marginBottom: 8, flexDirection: 'row'
 
   },
   deliverText: {
@@ -74,12 +78,12 @@ export default StyleSheet.create({
   searchBox: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#ccc',
+    backgroundColor: '#e0dcdc',
     paddingHorizontal: 20,
     height: 40,
-    borderColor: 'gray',
+    borderColor: '#d8d8d8',
     borderWidth: 0, borderRadius: 8,
-    margin: 5, width: '85%'
+    margin: 5, width: '70%'
   },
   searcherContainer: {
     flexDirection: 'row',

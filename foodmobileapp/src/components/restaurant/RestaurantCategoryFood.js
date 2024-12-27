@@ -1,11 +1,12 @@
-import { View, Text, TouchableOpacity, RefreshControl, Image, FlatList, ActivityIndicator } from "react-native";
+import { View, Text, TouchableOpacity, RefreshControl, FlatList, ActivityIndicator } from "react-native";
 import RestaurantStyles from "../../styles/RestaurantStyles";
-import { Searchbar } from "react-native-paper";
-import { useEffect, useState } from "react";
+import { Searchbar, Button } from "react-native-paper";
+import { useEffect, useState, useCallback } from "react";
 import RestaurantAPIs, { endpoints } from "../../config/RestaurantAPIs";
 import CustomerStyles from '../../styles/CustomerStyles';
 
-const RestaurantCategoryFood = () => {
+
+const RestaurantCategoryFood = ({ navigation }) => {
     const [loading, setLoading] = useState(false)
     const [restaurantCategories, setRestaurantCategories] = useState([]);
     const restaurantId = 1
@@ -22,7 +23,6 @@ const RestaurantCategoryFood = () => {
                 console.info(url)
 
                 let res = await RestaurantAPIs.get(url);
-                console.info(res.data.next)
 
                 if (page > 1)
                     setRestaurantCategories(current_res => [...current_res, ...res.data])
@@ -55,13 +55,12 @@ const RestaurantCategoryFood = () => {
         setPage(1);
         loadCategories();
     }
-
     const search = (value, callback) => {
         setPage(1);
         callback(value);
     }
     return (
-        <View>
+        <View style={{ flex: 1 }}>
             <View style={RestaurantStyles.dishCard}>
                 <Searchbar style={CustomerStyles.searchInput} placeholder="Danh mục món cần tìm"
                     placeholderTextColor="#999"
@@ -75,12 +74,20 @@ const RestaurantCategoryFood = () => {
                 data={restaurantCategories}
                 keyExtractor={(item, index) => `category-${item.id}-${index}`}
                 renderItem={({ item }) => (
-                    <TouchableOpacity style={[RestaurantStyles.dishCard]} key={`${item.id}-${Math.random()}`}>
-                        <Image source={{ uri: item.image }} style={RestaurantStyles.dishImage} />
-                        <Text style={RestaurantStyles.dishName}>{item.name}</Text>
+                    <TouchableOpacity style={[RestaurantStyles.containerCardMenu]}
+                        key={`${item.id}-${Math.random()}`}
+                        onPress={() => navigation.navigate('detail_category', { categoryId: item.id })}>
+                        <Text style={RestaurantStyles.cardChoiceName}>{item.name}</Text>
                     </TouchableOpacity>
                 )}
+                refreshing={loading}
+                onRefresh={loadCategories}
             />
+
+            <Button icon="plus" mode="contained" style={[RestaurantStyles.addBtn]}
+                onPress={() => navigation.navigate('add_category')}>
+                Thêm danh mục mới
+            </Button>
         </View >
     );
 }

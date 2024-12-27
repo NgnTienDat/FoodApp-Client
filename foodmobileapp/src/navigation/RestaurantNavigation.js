@@ -12,10 +12,25 @@ import RestaurantActiveTime from '../components/restaurant/RestaurantActiveTime'
 import RestaurantSaleSchedule from '../components/restaurant/RestaurantSaleSchedule';
 import RestaurantFood from '../components/restaurant/RestaurantFood';
 import RestaurantCategoryFood from '../components/restaurant/RestaurantCategoryFood';
+import AddCategory from '../components/restaurant/AddCategory';
+import AddFood from '../components/restaurant/AddFood';
+import DetailCategory from '../components/restaurant/DetailCategory';
+import DetailFood from '../components/restaurant/DetailFood';
 
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
+
+const CategoryStackNavigator = ({ navigation }) => {
+    return (
+        <Stack.Navigator>
+            <Stack.Screen name="category_food" component={RestaurantCategoryFood} options={{ headerShown: false }} />
+            <Stack.Screen name="add_category" component={AddCategory} options={{ headerShown: false }} />
+            <Stack.Screen name="detail_category" component={DetailCategory} options={{ headerShown: false }} />
+        </Stack.Navigator>
+    );
+}
+
 
 const MenuStackNavigator = ({ navigation }) => {
     React.useEffect(() => {
@@ -33,6 +48,10 @@ const MenuStackNavigator = ({ navigation }) => {
             <Stack.Screen name="menu" component={RestaurantFood} options={{ title: 'Món ăn' }} />
             <Stack.Screen name="sale_schedule" component={RestaurantSaleSchedule} options={{ title: 'Lịch bán' }} />
             <Stack.Screen name="category_food" component={RestaurantCategoryFood} options={{ title: 'Danh mục món ăn' }} />
+            <Stack.Screen name="add_category" component={AddCategory} options={{ title: 'Thêm danh mục' }} />
+            <Stack.Screen name="add_food" component={AddFood} options={{ title: 'Thêm món ăn' }} />
+            <Stack.Screen name="detail_category" component={DetailCategory} options={{ title: 'Chi tiết danh mục' }} />
+            <Stack.Screen name="detail_food" component={DetailFood} options={{ title: 'Chi tiết món ăn' }} />
         </Stack.Navigator>
     );
 }

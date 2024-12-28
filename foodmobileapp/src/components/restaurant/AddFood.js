@@ -7,12 +7,43 @@ import * as ImagePicker from 'expo-image-picker';
 import RestaurantAPIs, { endpoints } from "../../config/RestaurantAPIs";
 
 
-const AddFood = () => {
+const AddFood = ({ route, navigation }) => {
     const restaurantId = 1
+    const { onGoBack } = route.params || {};
     const [loading, setLoading] = useState(false);
-    const [name, setName] = useState("");
-    const [price, setPrice] = useState("")
-    const [description, setDescription] = useState("")
+    const [food, setFood] = useState({
+        "name": "",
+        "price": "",
+        "description": ""
+    })
+
+    const updateFood = (value, field) => {
+        setFood({ ...food, [field]: value });
+    }
+
+    const foods = {
+        "name": {
+            "title": "Tên món ăn",
+            "field": "name",
+            "secure": false,
+            "icon": "text",
+            "keyboardType": "default"
+        },
+        "price": {
+            "title": "Giá tiền",
+            "field": "price",
+            "secure": false,
+            "icon": "text",
+            "keyboardType": "numeric"
+        },
+        "description": {
+            "title": "Mô tả món ăn",
+            "field": "description",
+            "secure": false,
+            "icon": "text",
+            "keyboardType": "default"
+        }
+    }
 
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(null);
@@ -21,11 +52,11 @@ const AddFood = () => {
     const [openTime, setTimeOpen] = useState(false);
     const [valueTime, setTimeValue] = useState(null);
     const [timeItems, setTimeItems] = useState([
-        { label: 'Sáng', value: 'Morning' },
-        { label: 'Trưa', value: 'Noon' },
-        { label: 'Chiều', value: 'Afternoon' },
-        { label: 'Tối', value: 'Evening' },
-        { label: 'Cả ngày', value: 'Allday' },
+        { label: 'Sáng', value: 'Sáng' },
+        { label: 'Trưa', value: 'Trưa' },
+        { label: 'Chiều', value: 'Chiều' },
+        { label: 'Tối', value: 'Tối' },
+        { label: 'Cả ngày', value: 'Cả ngày' },
     ]);
 
     const [image, setImage] = useState(null)
@@ -46,7 +77,7 @@ const AddFood = () => {
             let url = `${endpoints['restaurantCategories'](restaurantId)}`
 
             let res = await RestaurantAPIs.get(url);
-            let dictionaryCategories = res.data.map(c => ({
+            let dictionaryCategories = res.data.results.map(c => ({
                 label: c.name,
                 value: c.id
             }));
@@ -64,11 +95,12 @@ const AddFood = () => {
         setLoading(true);
         try {
             const form = new FormData();
-            form.append('name', name);
-            form.append('price', price);
-            form.append('description', description);
+
+            for (let f in food)
+                if (f !== 'confirm')
+                    form.append(f, food[f]);
             form.append('category', value);
-            form.append('serve_period', valueTime);
+            form.append('serve_period', valueTime || 'Cả ngày');
             form.append('is_available', true);
             if (image) {
                 form.append('image', {
@@ -81,7 +113,8 @@ const AddFood = () => {
                 form.append('image', 'Have not uploaded photos yet');
             }
 
-            console.info(form)
+            console.info("Serve period gửi lên::", valueTime);
+            console.info("Form data:", Array.from(form.entries()));
             const response = await RestaurantAPIs.post(`${endpoints['createFood'](restaurantId)}`, form, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
@@ -89,11 +122,16 @@ const AddFood = () => {
             });
             if (response.status === 201) {
                 console.log(response.data);
-                setName('');
-                setDescription('');
+                setFood({
+                    "name": "",
+                    "price": "",
+                    "description": ""
+                });
                 setImage('');
-                setPrice('');
                 Alert.alert('Thành công', 'Món ăn mới đã được thêm!');
+                // Gọi callback khi quay về
+                if (onGoBack) onGoBack();
+                navigation.goBack();
             }
 
         }
@@ -116,36 +154,23 @@ const AddFood = () => {
 
     return (
 
+
         <View style={{ flex: 1 }}>
             <ScrollView nestedScrollEnabled={true}>
-                <View>
-                    <Text style={{ marginTop: 5, fontSize: 17, fontWeight: 'bold' }}> Tên món ăn: </Text>
-                    <TextInput style={RestaurantStyles.inputMargin}
-                        label=" Cơm tấm, Bánh mì, Phở ..."
-                        mode="outlined"
-                        value={name}
-                        onChangeText={text => setName(text)}
-                    />
-                </View>
-                <View>
-                    <Text style={{ marginTop: 5, fontSize: 17, fontWeight: 'bold' }}> Giá tiền: </Text>
-                    <TextInput style={RestaurantStyles.inputMargin}
-                        label=" 20.000 VND"
-                        keyboardType="numeric"
-                        mode="outlined"
-                        value={price}
-                        onChangeText={text => setPrice(text)}
-                    />
-                </View>
-                <View>
-                    <Text style={{ marginTop: 5, fontSize: 17, fontWeight: 'bold' }}> Mô tả: </Text>
-                    <TextInput style={RestaurantStyles.inputMargin}
-                        label="Mô tả món ăn..."
-                        mode="outlined"
-                        value={description}
-                        onChangeText={text => setDescription(text)}
-                    />
-                </View>
+                <>
+                    {Object.values(foods).map(f =>
+                        <View key={f.field}>
+                            <Text style={{ marginTop: 5, fontSize: 17, fontWeight: 'bold' }}> {f.title}: </Text>
+                            <TextInput style={RestaurantStyles.inputMargin}
+                                mode="outlined"
+                                value={food[f.field]}
+                                keyboardType={f.keyboardType}
+                                onChangeText={text => updateFood(text, f.field)}
+                            />
+                        </View>
+                    )}
+
+                </>
                 <View style={RestaurantStyles.dropDownStyle}>
                     <Text style={{ marginTop: 5, fontSize: 17, fontWeight: 'bold' }}> Hình ảnh: </Text>
                     <Button mode="outlined" onPress={pickImage}>
@@ -179,14 +204,15 @@ const AddFood = () => {
                         placeholder="Chọn thời điểm bán"
                     />
                 </View>
+                <Button icon="plus" mode="contained" style={[RestaurantStyles.addBtn]}
+                    onPress={addFood}
+                    loading={loading}
+                    disabled={loading}>
+                    Thêm
+                </Button>
             </ScrollView>
 
-            <Button icon="plus" mode="contained" style={[RestaurantStyles.addBtn]}
-                onPress={addFood}
-                loading={loading}
-                disabled={loading}>
-                Thêm
-            </Button>
+
         </View>
     );
 };

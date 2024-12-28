@@ -23,11 +23,13 @@ const RestaurantCategoryFood = ({ navigation }) => {
                 console.info(url)
 
                 let res = await RestaurantAPIs.get(url);
+                const categories = res.data.results;
+                console.log(categories);
 
                 if (page > 1)
-                    setRestaurantCategories(current_res => [...current_res, ...res.data])
+                    setRestaurantCategories(current_res => [...current_res, ...res.data.results])
                 else
-                    setRestaurantCategories(res.data)
+                    setRestaurantCategories(res.data.results)
 
                 if (!res.data.next) {
                     setPage(0);
@@ -76,7 +78,10 @@ const RestaurantCategoryFood = ({ navigation }) => {
                 renderItem={({ item }) => (
                     <TouchableOpacity style={[RestaurantStyles.containerCardMenu]}
                         key={`${item.id}-${Math.random()}`}
-                        onPress={() => navigation.navigate('detail_category', { categoryId: item.id })}>
+                        onPress={() => navigation.navigate('detail_category', {
+                            categoryId: item.id,
+                            onGoBack: () => refresh(),
+                        })}>
                         <Text style={RestaurantStyles.cardChoiceName}>{item.name}</Text>
                     </TouchableOpacity>
                 )}
@@ -85,7 +90,9 @@ const RestaurantCategoryFood = ({ navigation }) => {
             />
 
             <Button icon="plus" mode="contained" style={[RestaurantStyles.addBtn]}
-                onPress={() => navigation.navigate('add_category')}>
+                onPress={() => navigation.navigate('add_category', {
+                    onGoBack: () => refresh(), // Gọi lại khi quay về
+                })}>
                 Thêm danh mục mới
             </Button>
         </View >

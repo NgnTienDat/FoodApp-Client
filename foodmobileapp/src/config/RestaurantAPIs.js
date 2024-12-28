@@ -13,6 +13,8 @@ export const endpoints = {
     detailCategory: categoryId => `/restaurant_categories/${categoryId}/`,
     createFood: restaurantId => `/restaurants/${restaurantId}/create_food/`,
     detailFood: foodId => `/foods/${foodId}/`,
+    statusFood: foodId => `/foods/${foodId}/set_status_food/`,
+    restaurantMenus: restaurantId => `/restaurants/${restaurantId}/menus/`,
 };
 
 const RestaurantAPIs = axios.create({

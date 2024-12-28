@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, ScrollView, Image, Alert } from "react-native";
+import { View, Text, ScrollView, Switch, Image, Alert } from "react-native";
 import { TextInput, Button } from 'react-native-paper';
 import RestaurantStyles from "../../styles/RestaurantStyles";
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -9,6 +9,7 @@ import RestaurantAPIs, { endpoints } from "../../config/RestaurantAPIs";
 
 
 const DetailFood = ({ navigation, route }) => {
+    const [isOpen, setIsOpen] = useState(false);
     const { foodId, onGoBack } = route.params || {};
     const restaurantId = 1
     const [loading, setLoading] = useState(false);
@@ -88,15 +89,10 @@ const DetailFood = ({ navigation, route }) => {
             console.info('Done');
         }
     }
-    const mapServePeriod = (period) => {
-        const mapping = {
-            "Sáng": "Morning",
-            "Trưa": "Noon",
-            "Chiều": "Afternoon",
-            "Tối": "Evening",
-            "Cả ngày": "Allday"
-        };
-        return mapping[period] || null;
+
+    const [isAvailable, setIsAvailable] = useState(false);
+    const toggleAvailability = () => {
+        setIsAvailable((prev) => !prev);
     };
 
     const loadFood = async () => {
@@ -104,7 +100,7 @@ const DetailFood = ({ navigation, route }) => {
         try {
             let url = `${endpoints['detailFood'](foodId)}`
             let res = await RestaurantAPIs.get(url)
-            console.log(res.data.serve_period)
+            console.log(res.data.is_available)
 
 
             setFood({
@@ -117,6 +113,7 @@ const DetailFood = ({ navigation, route }) => {
             setValue(res.data.category);
             setTimeValue(res.data.serve_period);
             setImage({ uri: res.data.image });
+            setIsAvailable(res.data.is_available);
             console.info(res.data.serve_period)
         }
         catch (ex) {
@@ -137,7 +134,7 @@ const DetailFood = ({ navigation, route }) => {
                     form.append(f, food[f]);
             form.append('category', value);
             form.append('serve_period', valueTime);
-            form.append('is_available', true);
+            form.append('is_available', isAvailable);
             if (image) {
                 form.append('image', {
                     uri: image.uri,
@@ -230,7 +227,7 @@ const DetailFood = ({ navigation, route }) => {
                 <>
                     {Object.values(foods).map(f =>
                         <View key={f.field}>
-                            <Text style={{ marginTop: 5, fontSize: 17, fontWeight: 'bold' }}> {f.title}: {foodId}</Text>
+                            <Text style={{ marginTop: 5, fontSize: 17, fontWeight: 'bold' }}> {f.title}:</Text>
                             <TextInput style={RestaurantStyles.inputMargin}
                                 mode="outlined"
                                 value={food[f.field]}
@@ -241,6 +238,13 @@ const DetailFood = ({ navigation, route }) => {
                     )}
 
                 </>
+
+                <View style={RestaurantStyles.switchContainerCustom}>
+                    <Text style={{ fontSize: 17, fontWeight: 'bold' }}>Còn món: </Text>
+                    <Switch
+                        value={isAvailable}
+                        onValueChange={toggleAvailability} />
+                </View>
                 <View style={RestaurantStyles.dropDownStyle}>
                     <Text style={{ marginTop: 5, fontSize: 17, fontWeight: 'bold' }}> Hình ảnh: </Text>
                     <Button mode="outlined" onPress={pickImage}>

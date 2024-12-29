@@ -3,7 +3,8 @@
 
 import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, Image, FlatList, StyleSheet, useWindowDimensions } from "react-native";
-import { TabView, SceneMap } from 'react-native-tab-view';
+import MySearchBar from "../../components/customer/SearchingBar";
+import TopTab from "../../components/customer/TopTab";
 
 
 const data = [
@@ -23,38 +24,83 @@ const data = [
             { id: "2-2", name: "Combo gà cứng", price: "75.000đ", image: "image-url-4" },
         ],
     },
+
 ];
 
 const renderItems = ({ item }) => (
-        <View style={styles.itemContainer}>
-            <Image source={{ uri: item.image }} style={styles.itemImage} />
-            <View style={styles.itemInfo}>
-                <Text style={styles.itemName}>{item.name}</Text>
-                <Text style={styles.itemPrice}>{item.price}</Text>
-            </View>
-            <TouchableOpacity style={styles.addButton}>
-                <Text style={styles.addButtonText}>+</Text>
-            </TouchableOpacity>
+    <View style={styles.itemContainer}>
+        <Image source={{ uri: item.image }} style={styles.itemImage} />
+        <View style={styles.itemInfo}>
+            <Text style={styles.itemName}>{item.name}</Text>
+            <Text style={styles.itemPrice}>{item.price}</Text>
         </View>
-    );
-
-    
-export const FoodRoute = () => (
-    <View>
-        <Text>MÓN ĂN</Text>
-       
+        <TouchableOpacity style={styles.addButton}>
+            <Text style={styles.addButtonText}>+</Text>
+        </TouchableOpacity>
     </View>
 );
 
 
-export const RestaurantRoute = () => {
+const FoodRoute = ({ foods }) => { 
     return (
-    <View>
-       <Text> NHÀ HÀNG</Text>
-    </View>
+        <View>
+
+            <FlatList
+                data={foods}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={({ item }) => (
+                    <View style={styles.restaurantContainer}>
+                        <Text style={styles.restaurantName}>{item.restaurant.name}</Text>
+                        <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{item.name}</Text>
+                        <Text>Giá: {item.price} VND</Text>
+                        <Text>Mô tả: {item.description || 'Không có mô tả'}</Text>
+                        <Image
+                            source={{ uri: item.image }}
+                            style={{ width: 100, height: 100, marginTop: 10 }}
+                        />
+                    </View>
+                )}
+            />
+        </View>
     )
 }
 
+
+const RestaurantRoute = () => {
+    return (
+        <View>
+            <FlatList
+            data={data}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+                <View style={styles.restaurantContainer}>
+                    <Text style={styles.restaurantName}>{item.restaurant}</Text>
+                    {item.items.map((food) => renderItems({ item: food }))}
+                </View>
+            )}
+        />
+        </View>
+    )
+}
+
+const SearchedScreen = ({ route }) => {
+    const { foods } = route.params;
+    console.log('foods: ', foods)
+    const tabsForFoods = [
+        { name: "Món ăn", component: () => <FoodRoute foods={foods} /> },
+        { name: "Nhà hàng", component: RestaurantRoute },
+    ];
+    return (
+        <View style={{ flex: 1 }}>
+
+
+
+            <TopTab tabs={tabsForFoods} />
+        </View>
+
+    )
+}
+export default SearchedScreen
 
 const styles = StyleSheet.create({
     container: {
@@ -137,8 +183,8 @@ const styles = StyleSheet.create({
     },
 });
 
- {/* List */}
-        {/* <FlatList
+{/* List */ }
+{/* <FlatList
             data={data}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (

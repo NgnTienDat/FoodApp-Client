@@ -33,9 +33,9 @@ const DashBoard = ({ navigation }) => {
                 setLoading(true)
                 let res = await RestaurantAPIs.get(url)
                 if (page > 1)
-                    setFoods(current_res => [...current_res, ...res.data])
+                    setFoods(current_res => [...current_res, ...res.data.results])
                 else
-                    setFoods(res.data)
+                    setFoods(res.data.results)
 
                 if (!res.data.next) {
                     setPage(0);
@@ -92,13 +92,13 @@ const DashBoard = ({ navigation }) => {
                 <TouchableOpacity style={RestaurantStyles.menuItem}
                     onPress={() => navigation.navigate('index_menu')}>
                     <Icon source="silverware" size={30} />
-                    <Text style={RestaurantStyles.iconText}>Thực đơn</Text>
+                    <Text style={RestaurantStyles.iconText}>Món ăn</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={RestaurantStyles.menuItem}
+                {/* <TouchableOpacity style={RestaurantStyles.menuItem}
                     onPress={() => navigation.navigate('active_time')}>
                     <Icon source="clock-time-eight-outline" size={30} />
-                    <Text style={RestaurantStyles.iconText}>Giờ hoạt động</Text>
-                </TouchableOpacity>
+                    <Text style={RestaurantStyles.iconText}>Menu</Text>
+                </TouchableOpacity> */}
                 <TouchableOpacity style={RestaurantStyles.menuItem}
                     onPress={() => navigation.navigate('report')}>
                     <Icon source="poll" size={30} />
@@ -121,12 +121,16 @@ const DashBoard = ({ navigation }) => {
                 data={foods}
                 keyExtractor={(item, index) => `${item.id}-${index}`}
                 renderItem={({ item }) => (
-                    <TouchableOpacity style={[RestaurantStyles.dishCard]} key={`${item.id}-${Math.random()}`}>
+                    <TouchableOpacity style={[RestaurantStyles.dishCard,
+                    !item.is_available && { backgroundColor: '#ccc' }
+                    ]} key={`${item.id}-${Math.random()}`}>
                         <Image source={{ uri: item.image }} style={RestaurantStyles.dishImage} />
                         <View style={{ flexDirection: 'column', justifyContent: 'space-between', paddingLeft: 10 }}>
                             <Text style={RestaurantStyles.dishName}>{item.name}</Text>
                             <Text>Thành tiền: {item.price} VNĐ</Text>
                             <Text>{item.description}</Text>
+                            <Text>Trạng thái: {item.is_available ? 'Còn món' : 'Hết món'}</Text>
+
                         </View>
                     </TouchableOpacity>
                 )}

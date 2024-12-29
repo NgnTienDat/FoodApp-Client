@@ -1,4 +1,4 @@
-import { View, Text, FlatList, RefreshControl, TouchableOpacity, Image, ActivityIndicator } from "react-native";
+import { View, Text, FlatList, RefreshControl, Switch, TouchableOpacity, Image, ActivityIndicator } from "react-native";
 import { Searchbar, Button } from "react-native-paper";
 import RestaurantStyles from "../../styles/RestaurantStyles";
 import CustomerStyles from '../../styles/CustomerStyles';
@@ -23,11 +23,12 @@ const RestaurantFood = ({ navigation }) => {
                 console.info(url)
 
                 let res = await RestaurantAPIs.get(url);
+                // console.info(res.data.results)
 
                 if (page > 1)
-                    setFoods(current_res => [...current_res, ...res.data])
+                    setFoods(current_res => [...current_res, ...res.data.results])
                 else
-                    setFoods(res.data)
+                    setFoods(res.data.results)
 
                 if (!res.data.next) {
                     setPage(0);
@@ -39,6 +40,24 @@ const RestaurantFood = ({ navigation }) => {
             } finally {
                 setLoading(false);
             }
+        }
+    }
+
+    const [openFoods, setOpenFoods] = useState({});
+    const setStatusFood = async (foodId, newStatus) => {
+        setLoading(true)
+        try {
+            let urlSetStatus = `${endpoints['statusFood'](foodId)}`
+            await RestaurantAPIs.post(urlSetStatus);
+            setFoods(currentFoods =>
+                currentFoods.map(food =>
+                    food.id === foodId ? { ...food, is_available: newStatus } : food
+                )
+            );
+        } catch (ex) {
+            console.error('Loi doi trang thai' + ex);
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -77,14 +96,29 @@ const RestaurantFood = ({ navigation }) => {
                 data={foods}
                 keyExtractor={(item, index) => `food-${item.id}-${index}`}
                 renderItem={({ item }) => (
-                    <TouchableOpacity style={[RestaurantStyles.dishCard]}
+                    <TouchableOpacity style={[RestaurantStyles.dishCard,
+                    !item.is_available && { backgroundColor: '#ccc' }]}
                         key={`${item.id}-${Math.random()}`}
-                        onPress={() => navigation.navigate('detail_food')}>
-                        <Image source={{ uri: item.image }} style={RestaurantStyles.dishImage} />
+                        onPress={() => navigation.navigate('detail_food', {
+                            foodId: item.id,
+                            onGoBack: () => refresh(),
+                        })}>
+                        <Image source={{ uri: item.image }} style={[RestaurantStyles.dishImage]} />
                         <View style={{ flexDirection: 'column', justifyContent: 'space-between', paddingLeft: 10 }}>
                             <Text style={RestaurantStyles.dishName}>{item.name}</Text>
                             <Text>Thành tiền: {item.price} VNĐ</Text>
                             <Text>{item.description}</Text>
+                            <Text>Trạng thái: {item.is_available ? 'Còn món' : 'Hết món'}</Text>
+
+                        </View>
+                        <View style={{ flex: 1 }}>
+                            <Switch
+                                value={item.is_available}
+                                onValueChange={(newValue) => {
+                                    setOpenFoods(prev => ({ ...prev, [item.id]: newValue }));
+                                    setStatusFood(item.id, newValue);
+                                }}
+                            />
                         </View>
                     </TouchableOpacity>
                 )}
@@ -92,10 +126,15 @@ const RestaurantFood = ({ navigation }) => {
                 onRefresh={loadFoods}
             />
 
-            <Button icon="plus" mode="contained" style={[RestaurantStyles.addBtn]}
-                onPress={() => navigation.navigate('add_food')}>
-                Thêm món ăn mới
-            </Button>
+
+            <View >
+                <Button icon="plus" mode="contained" style={[RestaurantStyles.addBtn]}
+                    onPress={() => navigation.navigate('add_food', {
+                        onGoBack: () => refresh(), // Gọi lại khi quay về
+                    })}>
+                    Thêm món ăn mới
+                </Button>
+            </View>
         </View>
     );
 }

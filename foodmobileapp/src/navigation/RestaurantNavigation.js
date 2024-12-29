@@ -9,7 +9,7 @@ import RestaurantMenu from '../components/restaurant/RestaurantMenu';
 import RestaurantOrder from '../components/restaurant/RestaurantOrder';
 import RestaurantReport from '../components/restaurant/RestaurantReport';
 import RestaurantActiveTime from '../components/restaurant/RestaurantActiveTime';
-import RestaurantSaleSchedule from '../components/restaurant/RestaurantSaleSchedule';
+import RestaurantMenuFood from '../components/restaurant/RestaurantMenuFood';
 import RestaurantFood from '../components/restaurant/RestaurantFood';
 import RestaurantCategoryFood from '../components/restaurant/RestaurantCategoryFood';
 import AddCategory from '../components/restaurant/AddCategory';
@@ -20,16 +20,6 @@ import DetailFood from '../components/restaurant/DetailFood';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
-
-const CategoryStackNavigator = ({ navigation }) => {
-    return (
-        <Stack.Navigator>
-            <Stack.Screen name="category_food" component={RestaurantCategoryFood} options={{ headerShown: false }} />
-            <Stack.Screen name="add_category" component={AddCategory} options={{ headerShown: false }} />
-            <Stack.Screen name="detail_category" component={DetailCategory} options={{ headerShown: false }} />
-        </Stack.Navigator>
-    );
-}
 
 
 const MenuStackNavigator = ({ navigation }) => {
@@ -46,7 +36,7 @@ const MenuStackNavigator = ({ navigation }) => {
         <Stack.Navigator>
             <Stack.Screen name="index" component={RestaurantMenu} options={{ title: 'Thực đơn' }} />
             <Stack.Screen name="menu" component={RestaurantFood} options={{ title: 'Món ăn' }} />
-            <Stack.Screen name="sale_schedule" component={RestaurantSaleSchedule} options={{ title: 'Lịch bán' }} />
+            <Stack.Screen name="sale_schedule" component={RestaurantMenuFood} options={{ title: 'Menu' }} />
             <Stack.Screen name="category_food" component={RestaurantCategoryFood} options={{ title: 'Danh mục món ăn' }} />
             <Stack.Screen name="add_category" component={AddCategory} options={{ title: 'Thêm danh mục' }} />
             <Stack.Screen name="add_food" component={AddFood} options={{ title: 'Thêm món ăn' }} />
@@ -65,7 +55,7 @@ const StackNavigator = () => {
             <Stack.Screen name="index_menu" component={MenuStackNavigator} options={{ headerShown: false }} />
             <Stack.Screen name="order" component={RestaurantOrder} options={{ title: 'Đơn hàng' }} />
             <Stack.Screen name="report" component={RestaurantReport} options={{ title: 'Báo cáo' }} />
-            <Stack.Screen name="active_time" component={RestaurantActiveTime} options={{ title: 'Giờ hoạt động' }} />
+            {/* <Stack.Screen name="active_time" component={RestaurantActiveTime} options={{ title: 'Giờ hoạt động' }} /> */}
         </Stack.Navigator>
     );
 }

@@ -2,14 +2,16 @@ import { ActivityIndicator, Alert, Button, Text, TouchableOpacity, View } from "
 import { TextInput } from "react-native-paper"
 import CustomerStyles from "../../styles/CustomerStyles"
 import { useNavigation } from "@react-navigation/native"
-import { useState } from "react"
+import { useContext, useState } from "react"
 import APIs, { authApis, endpoints } from "../../config/APIs"
 import QueryString from "qs"
 import AsyncStorage from "@react-native-async-storage/async-storage"
+import { MyDispatchContext } from "../../config/UserContexts"
 
 const LoginScreen = () => {
     const nav = useNavigation()
     const [loading, setLoading] = useState(false)
+    const dispatch = useContext(MyDispatchContext)
     const [user, setUser] = useState({
         'username': '',
         'password': ''
@@ -20,13 +22,11 @@ const LoginScreen = () => {
             'title': 'Nhập tên đăng nhập',
             'field': 'username',
             'secure': false,
-           
         },
         'password': {
             'title': 'Nhập mật khẩu',
             'field': 'password',
             'secure': true,
-            
         }
     }
 
@@ -46,7 +46,7 @@ const LoginScreen = () => {
                 ...user
             })
 
-            let res = await APIs.post(endpoints['login'], loginData, {
+            const res = await APIs.post(endpoints['login'], loginData, {
                 // cho server biết dữ liệu trong body được mã hóa theo chuẩn x-www-form-urlencoded.
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -56,11 +56,22 @@ const LoginScreen = () => {
 
             await AsyncStorage.setItem('token', res.data.access_token)
 
-            // const authTokenApi = await authApis()
-            
-            // const currentUser = await authTokenApi.get(endpoints['current-user'])
-            // console.info('TOKEN:')
-            // console.info(currentUser.data)
+
+            const authTokenApi = await authApis()
+            const currentUser = await authTokenApi.get(endpoints['current-user'])
+            const resolvedData = currentUser.data
+
+
+            console.info("TRƯỚC DISPATCH: \n", resolvedData)
+            dispatch({ 'type': 'login', 'payload': resolvedData })
+            console.info("SAU DISPATCH: \n")
+
+
+            console.log(typeof resolvedData); // Output object
+
+            nav.navigate('MainTabs');
+
+
 
         } catch (ex) {
             console.error(ex)
@@ -80,29 +91,15 @@ const LoginScreen = () => {
             padding: 20,
         }}>
 
-            {Object.values(users).map(u => <TextInput 
+            {Object.values(users).map(u => <TextInput
                 key={u.field}
                 secureTextEntry={u.secure}
+                mode="outlined"
                 style={CustomerStyles.loginInput}
                 placeholder={u.title}
                 value={user[u.field]}
                 onChangeText={t => updateUser(t, u.field)} />)}
 
-            {/* <TextInput style={CustomerStyles.loginInput}
-                underlineColorAndroid="transparent"
-                placeholder="Nhập tên đăng nhập"
-                mode="outlined" value={user.username}
-                onChangeText={t => updateUser(t, 'username')}
-            />
-
-            <TextInput style={CustomerStyles.loginInput}
-                underlineColorAndroid="transparent"
-                placeholder="Nhập mật khẩu"
-                mode="outlined"
-                secureTextEntry={true}
-                value={user.password}
-                onChangeText={t => updateUser(t, 'password')}
-            /> */}
 
             <TouchableOpacity onPress={login} loading={loading} style={CustomerStyles.loginButton}>
                 {loading && <ActivityIndicator style={{ marginRight: 10 }} color="#fff" />}

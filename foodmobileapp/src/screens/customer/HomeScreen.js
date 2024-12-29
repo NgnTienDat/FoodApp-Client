@@ -49,7 +49,7 @@ const HomeScreen = () => {
         <View style={CustomerStyles.container}>
             <HomeHeader />
 
-            <FlatList
+            <FlatList 
                 ListHeaderComponent={MainCategory}
                 data={restaurants}
                 onEndReached={loadMore}

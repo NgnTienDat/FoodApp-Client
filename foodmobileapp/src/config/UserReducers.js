@@ -1,19 +1,23 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { authApis, endpoints } from "./APIs"
 
-const MyUserReducer = async (currentState, action) => {
+const MyUserReducer = (currentState, action) => {
     switch (action.type) {
         case 'login':
-            const authTokenApi = await authApis()
-            const currentUser = await authTokenApi.get(endpoints['current-user'])
-            console.info(currentUser.data)
-            return currentUser.data
-
+            if (action.payload instanceof Promise) {
+                console.error("Payload là Promise, cần xử lý trước khi dispatch.");
+                return currentState;
+              }
+            return action.payload; 
         case 'logout':
-            await AsyncStorage.removeItem('token')
-            return null
+            AsyncStorage.removeItem('token');
+            console.info('Đã đăng xuất');
+            return null;
+        default:
+            return currentState;
     }
-    return currentState
-}
+};
+
+
 
 export default MyUserReducer

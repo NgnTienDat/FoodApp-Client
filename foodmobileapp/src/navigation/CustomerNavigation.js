@@ -2,15 +2,22 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from '../screens/customer/HomeScreen';
 import AccountScreen from '../screens/customer/AccountScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { Icon } from 'react-native-paper';
 import DashBoard from '../screens/restaurant/DashBoard';
 import CustomerStyles from '../styles/CustomerStyles';
-import React from 'react';
+import React, { useContext } from 'react';
 import RestaurantNavigation from './RestaurantNavigation';
 import HomeScreenTest from '../screens/customer/test';
 import SearchScreen from '../screens/customer/SearchScreen';
 import FollowScreen from '../screens/customer/FollowScreen';
 import OrderScreen from '../screens/customer/OrderScreen';
+import LoginScreen from '../screens/auth/Login';
+import RegisterScreen from '../screens/auth/Register';
+import RestaurantRegisterScreen from '../screens/auth/RestaurantRegister';
+import { MyUserContext } from '../config/UserContexts';
+import MySearchBar from '../components/customer/SearchingBar';
+import { FoodRoute, RestaurantRoute } from '../screens/customer/Searched';
 
 
 const Stack = createNativeStackNavigator()
@@ -19,18 +26,39 @@ const HomeStackNavigator = () => {
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name='HomeScreen' component={HomeScreen} />
-            <Stack.Screen name='SearchEngine' t component={SearchScreen} options={{ title: 'Tìm kiếm', headerShown: true}}/>
 
         </Stack.Navigator>
     )
 }
 
 const AccountStackNavigator = () => {
+
+
+
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name='AccountScreen' component={AccountScreen} />
-            
+
         </Stack.Navigator>
+    )
+}
+
+const TopTab = createMaterialTopTabNavigator()
+function SearchTopTab() {
+    return (
+        <TopTab.Navigator
+            screenOptions={{
+                tabBarLabelStyle: {
+                    fontWeight: 'bold'
+                },
+                tabBarIndicatorStyle: {
+                    backgroundColor:'#EE4D2D', height: 3, borderRadius:8
+                }
+            }}
+        >
+            <TopTab.Screen name='Món ăn' component={FoodRoute} />
+            <TopTab.Screen name='Nhà hàng' component={RestaurantRoute} />
+        </TopTab.Navigator>
     )
 }
 
@@ -38,8 +66,9 @@ const AccountStackNavigator = () => {
 const FollowStackNavigator = () => {
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name='FollowScreen' component={FollowScreen} />
-            
+            <Stack.Screen name='FollowScreen' component={FollowScreen}
+                options={{ title: 'Yêu thích', headerShown: true }} />
+
         </Stack.Navigator>
     )
 }
@@ -48,12 +77,13 @@ const OrderStackNavigator = () => {
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name='OrderScreen' component={OrderScreen} />
-            
+
         </Stack.Navigator>
     )
 }
 
 const Tab = createBottomTabNavigator()
+
 
 const TabNavigator = () => {
     return (
@@ -64,17 +94,26 @@ const TabNavigator = () => {
             headerShown: false
         }}>
             <Tab.Screen name='homeScreen' component={HomeStackNavigator}
-                options={{ title: 'Trang chủ', 
-                tabBarIcon: () => <Icon source="home-outline" size={30} /> }} />
+                options={{
+                    title: 'Trang chủ',
+                    tabBarIcon: () => <Icon source="home-outline" size={30} />
+                }} />
             <Tab.Screen name='following' component={FollowStackNavigator}
-                options={{ title: 'Yêu thích', 
-                tabBarIcon: () => <Icon source="heart-outline" size={30} /> }} />
+                options={{
+                    title: 'Yêu thích',
+                    tabBarIcon: () => <Icon source="heart-outline" size={30}
+                    />
+                }} />
             <Tab.Screen name='orders' component={OrderStackNavigator}
-                options={{ title: 'Đơn hàng', 
-                tabBarIcon: () => <Icon source="format-list-checkbox" size={30} /> }} />
+                options={{
+                    title: 'Đơn hàng',
+                    tabBarIcon: () => <Icon source="format-list-checkbox" size={30} />
+                }} />
             <Tab.Screen name='me' component={AccountStackNavigator}
-                options={{ title: 'Tôi', 
-                tabBarIcon: () => <Icon source="account-outline" size={30} /> }} />
+                options={{
+                    title: 'Tôi',
+                    tabBarIcon: () => <Icon source="account-outline" size={30} />
+                }} />
         </Tab.Navigator>
     )
 }
@@ -83,9 +122,31 @@ const RootNavigator = () => {
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name="MainTabs" component={TabNavigator} />
-            <Stack.Screen  name='MyRestaurant' component={RestaurantNavigation} options={{ headerShown: false}}/>
+            <Stack.Screen name='MyRestaurant' component={RestaurantNavigation} options={{ headerShown: false }} />
+            <Stack.Screen name='LoginScreen' component={LoginScreen} options={{ title: 'Đăng nhập', headerShown: true }} />
+            <Stack.Screen name='SearchEngine' t component={SearchScreen}
+                options={{
+                    title: 'Tìm kiếm', headerShown: true,
+                    header: () => (
+                        <MySearchBar />
+                    )
+                }} />
+            <Stack.Screen name='SearchedScreen' component={SearchTopTab}
+                options={{
+                    title: 'Yêu thích', headerShown: true, header: () => (
+                        <MySearchBar />
+                    )
+                }} />
+            <Stack.Screen name='RegisterScreen' component={RegisterScreen} options={{ title: 'Đăng ký', headerShown: true }} />
+            <Stack.Screen name='RestaurantRegisterScreen' t component={RestaurantRegisterScreen} options={{ title: 'Đăng ký nhà hàng', headerShown: true }} />
+
         </Stack.Navigator>
     )
 }
 
 export default RootNavigator
+
+// component={SearchTopTab}
+//             options={{ title: 'Yêu thích', headerShown: true, header: () =>(
+//                 <MySearchBar />
+//             )}}/>

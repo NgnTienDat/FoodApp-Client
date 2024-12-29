@@ -4,8 +4,9 @@ import { TextInput, Button } from 'react-native-paper';
 import RestaurantStyles from "../../styles/RestaurantStyles";
 import RestaurantAPIs, { endpoints } from "../../config/RestaurantAPIs";
 
-const AddCategory = () => {
+const AddCategory = ({ route, navigation }) => {
     const [category, setCategory] = useState("")
+    const { onGoBack } = route.params || {};
     const [loading, setLoading] = useState(false);
     const restaurantId = 1
 
@@ -25,6 +26,9 @@ const AddCategory = () => {
                 setCategory('');
                 Alert.alert('Thành công', 'Danh mục mới đã được thêm!');
             }
+            // Gọi callback khi quay về
+            if (onGoBack) onGoBack();
+            navigation.goBack();
 
         }
         catch (ex) {

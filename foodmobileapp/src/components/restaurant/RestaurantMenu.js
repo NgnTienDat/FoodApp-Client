@@ -17,8 +17,8 @@ const RestaurantMenu = ({ navigation }) => {
             </TouchableOpacity>
             <TouchableOpacity style={Styles.containerCardMenu}
                 onPress={() => navigation.navigate('sale_schedule')}>
-                <Icon source="store-clock-outline" size={30} />
-                <Text style={Styles.cardChoiceName}>Lịch bán</Text>
+                <Icon source="book-open-outline" size={30} />
+                <Text style={Styles.cardChoiceName}>Menu</Text>
             </TouchableOpacity>
         </View>
     );

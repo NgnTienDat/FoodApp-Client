@@ -85,5 +85,7 @@ export default StyleSheet.create({
         margin: 10,
     },
 
+    switchContainerCustom: { flexDirection: 'row', justifyContent: 'right', alignItems: 'center', padding: 8 },
+
 
 });

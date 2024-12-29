@@ -4,6 +4,7 @@ import RestaurantAPIs, { endpoints } from "../../config/RestaurantAPIs";
 import { TextInput, Button } from 'react-native-paper';
 import RestaurantStyles from "../../styles/RestaurantStyles";
 
+
 const DetailCategory = ({ route, navigation }) => {
     const categoryId = route.params?.categoryId;
     const { onGoBack } = route.params || {};
@@ -20,6 +21,7 @@ const DetailCategory = ({ route, navigation }) => {
             console.log(res.data.name)
             setCategory(res.data)
             setText(res.data.name)
+
         }
         catch (ex) {
             console.error('lỗi' + ex);
@@ -44,6 +46,7 @@ const DetailCategory = ({ route, navigation }) => {
                 setCategory('');
                 Alert.alert('Thành công', 'Danh mục đã được cập nhật!');
             }
+
             // Gọi callback khi quay về
             if (onGoBack) onGoBack();
             navigation.goBack();
@@ -77,6 +80,7 @@ const DetailCategory = ({ route, navigation }) => {
                 setCategory('');
                 Alert.alert('Thành công', 'Danh mục đã được xóa!');
             }
+
             // Gọi callback khi quay về
             if (onGoBack) onGoBack();
             navigation.goBack();

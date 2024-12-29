@@ -77,6 +77,7 @@ const AddFood = ({ route, navigation }) => {
             let url = `${endpoints['restaurantCategories'](restaurantId)}`
 
             let res = await RestaurantAPIs.get(url);
+
             let dictionaryCategories = res.data.results.map(c => ({
                 label: c.name,
                 value: c.id
@@ -153,7 +154,6 @@ const AddFood = ({ route, navigation }) => {
     }, [restaurantId]);
 
     return (
-
 
         <View style={{ flex: 1 }}>
             <ScrollView nestedScrollEnabled={true}>

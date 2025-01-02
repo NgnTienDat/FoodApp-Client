@@ -58,4 +58,7 @@ export default StyleSheet.create({
         color: "#000", // Màu chữ
         fontSize: 16, // Kích thước chữ
     },
+    test: {
+        color: 'red'
+    }
 })

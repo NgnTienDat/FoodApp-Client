@@ -10,6 +10,7 @@ export const endpoints = {
     'current-user': '/users/current-user',
     'register': '/users/',
     'foods': '/foods/',
+    'search-food': '/search-food/'
 }
 
 export const authApis = async () => {

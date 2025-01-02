@@ -1,4 +1,4 @@
-import { Button, Text, TextInput, TouchableOpacity, View } from "react-native"
+import { Alert, Button, Text, TextInput, TouchableOpacity, View } from "react-native"
 import CustomerStyles from "../../styles/CustomerStyles"
 import { Icon } from "react-native-paper"
 import { HeaderBackButton } from '@react-navigation/elements';
@@ -8,35 +8,46 @@ import APIs, { endpoints } from "../../config/APIs";
 
 const MySearchBar = () => {
     const nav = useNavigation()
-    const [query, setQuery] = useState('')
+    const [querySearch, setQuerySearch] = useState('')
     const [result, setResult] = useState([])
     const [loading, setLoading] = useState(false)
     const [page, setPage] = useState(1)
 
     const searchFood = async () => {
-        if (!query.trim()) return
+        console.info("here1");
+        if (!querySearch.trim()) return
         try {
             setLoading(true)
-            let url = `${endpoints['foods']}?name=${query}`
-            let res =  await APIs.get(url)
+            console.info("here2");
 
-            console.info("result")
-            console.info(res.data)
-            
-            setResult(res.data)
-            // console.info("API Response:", res.data);
-            // setResult(res.data);
-            
+            let url = `${endpoints['search-food']}?name=${querySearch}`
+            // let url = `${endpoints['foods']}?name=${querySearch}`
+            console.info("URL", url);
+
+            let res = await APIs.get(url)
+
+
+            console.info("API Response:", res.data);
+            console.info("QuerySEarch:", querySearch);
+            nav.navigate('SearchedScreen', {foods: res.data })
+            setResult(res.data);
+
+
         } catch (error) {
             console.info(error)
         } finally {
             setLoading(false)
         }
     }
-    
-    
+    const handleSearch = () => {
+        Alert.alert('Tìm kiếm', `Bạn đã tìm: ${querySearch}`);
+        // Thực hiện logic tìm kiếm ở đây (gọi API, điều hướng, v.v.)
+    };
+
+
+
     return (
-        
+
         <View style={{ marginTop: 70 }}>
             <View style={CustomerStyles.searcherContainer}>
                 <HeaderBackButton onPress={() => nav.goBack()} />
@@ -47,12 +58,12 @@ const MySearchBar = () => {
                         placeholder="Bánh Mì Chim Chay Giảm 50%"
                         placeholderTextColor="#999"
                         onSubmitEditing={searchFood}
-                        onChangeText={setQuery}
-                        value={query}
-                        />
+                        onChangeText={setQuerySearch}
+                        value={querySearch}
+                    />
 
                 </View>
-                
+
                 <TouchableOpacity style={CustomerStyles.cancelInput} onPress={() => console.log("hủy")}>
                     <Text style={{
                         fontSize: 16,
@@ -63,7 +74,7 @@ const MySearchBar = () => {
             </View>
         </View>
 
-)
+    )
 }
 
 export default MySearchBar

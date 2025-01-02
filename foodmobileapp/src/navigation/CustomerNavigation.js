@@ -2,13 +2,11 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from '../screens/customer/HomeScreen';
 import AccountScreen from '../screens/customer/AccountScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { Icon } from 'react-native-paper';
 import DashBoard from '../screens/restaurant/DashBoard';
 import CustomerStyles from '../styles/CustomerStyles';
 import React, { useContext } from 'react';
 import RestaurantNavigation from './RestaurantNavigation';
-import HomeScreenTest from '../screens/customer/test';
 import SearchScreen from '../screens/customer/SearchScreen';
 import FollowScreen from '../screens/customer/FollowScreen';
 import OrderScreen from '../screens/customer/OrderScreen';
@@ -17,7 +15,7 @@ import RegisterScreen from '../screens/auth/Register';
 import RestaurantRegisterScreen from '../screens/auth/RestaurantRegister';
 import { MyUserContext } from '../config/UserContexts';
 import MySearchBar from '../components/customer/SearchingBar';
-
+import SearchedScreen, { FoodRoute, RestaurantRoute } from '../screens/customer/Searched';
 
 
 const Stack = createNativeStackNavigator()
@@ -42,26 +40,6 @@ const AccountStackNavigator = () => {
         </Stack.Navigator>
     )
 }
-
-const TopTab = createMaterialTopTabNavigator()
-function SearchTopTab() {
-    return (
-        <TopTab.Navigator
-            screenOptions={{
-                tabBarLabelStyle: {
-                    fontWeight: 'bold'
-                },
-                tabBarIndicatorStyle: {
-                    backgroundColor: '#EE4D2D', height: 3, borderRadius: 8
-                }
-            }}
-        >
-            <TopTab.Screen name='Món ăn' component={FoodRoute} />
-            <TopTab.Screen name='Nhà hàng' component={RestaurantRoute} />
-        </TopTab.Navigator>
-    )
-}
-
 
 const FollowStackNavigator = () => {
     return (
@@ -131,9 +109,9 @@ const RootNavigator = () => {
                         <MySearchBar />
                     )
                 }} />
-            <Stack.Screen name='SearchedScreen' component={SearchTopTab}
+            <Stack.Screen name='SearchedScreen' component={SearchedScreen}
                 options={{
-                    title: 'Yêu thích', headerShown: true, header: () => (
+                    title: 'eh', headerShown: true, header: () => (
                         <MySearchBar />
                     )
                 }} />

@@ -23,7 +23,6 @@ const RestaurantFood = ({ navigation }) => {
                 console.info(url)
 
                 let res = await RestaurantAPIs.get(url);
-                // console.info(res.data.results)
 
                 if (page > 1)
                     setFoods(current_res => [...current_res, ...res.data.results])

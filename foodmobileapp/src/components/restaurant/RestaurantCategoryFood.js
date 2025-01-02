@@ -23,6 +23,7 @@ const RestaurantCategoryFood = ({ navigation }) => {
                 console.info(url)
 
                 let res = await RestaurantAPIs.get(url);
+
                 const categories = res.data.results;
                 console.log(categories);
 
@@ -78,6 +79,7 @@ const RestaurantCategoryFood = ({ navigation }) => {
                 renderItem={({ item }) => (
                     <TouchableOpacity style={[RestaurantStyles.containerCardMenu]}
                         key={`${item.id}-${Math.random()}`}
+
                         onPress={() => navigation.navigate('detail_category', {
                             categoryId: item.id,
                             onGoBack: () => refresh(),

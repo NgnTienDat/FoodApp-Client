@@ -24,6 +24,7 @@ const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 
+
 const MenuStackNavigator = ({ navigation }) => {
     React.useEffect(() => {
         navigation.getParent()?.setOptions({

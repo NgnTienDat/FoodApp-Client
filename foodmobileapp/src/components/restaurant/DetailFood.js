@@ -289,6 +289,7 @@ const DetailFood = ({ navigation, route }) => {
             </ScrollView>
 
 
+
         </View>
     );
 };

@@ -4,6 +4,7 @@ import { TextInput, Button } from 'react-native-paper';
 import RestaurantStyles from "../../styles/RestaurantStyles";
 import RestaurantAPIs, { endpoints } from "../../config/RestaurantAPIs";
 
+
 const AddCategory = ({ route, navigation }) => {
     const [category, setCategory] = useState("")
     const { onGoBack } = route.params || {};

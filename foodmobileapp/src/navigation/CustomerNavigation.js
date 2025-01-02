@@ -16,6 +16,8 @@ import RestaurantRegisterScreen from '../screens/auth/RestaurantRegister';
 import { MyUserContext } from '../config/UserContexts';
 import MySearchBar from '../components/customer/SearchingBar';
 import SearchedScreen, { FoodRoute, RestaurantRoute } from '../screens/customer/Searched';
+import FoodFilter from '../components/customer/FoodFilter';
+import { CardStyleInterpolators } from '@react-navigation/stack';
 
 
 const Stack = createNativeStackNavigator()
@@ -118,15 +120,11 @@ const RootNavigator = () => {
                     )
                 }} />
             <Stack.Screen name='RegisterScreen' component={RegisterScreen} options={{ title: 'Đăng ký', headerShown: true }} />
-            <Stack.Screen name='RestaurantRegisterScreen' t component={RestaurantRegisterScreen} options={{ title: 'Đăng ký nhà hàng', headerShown: true }} />
-
+            <Stack.Screen name='RestaurantRegisterScreen' component={RestaurantRegisterScreen} options={{ title: 'Đăng ký nhà hàng', headerShown: true }} />
+            
         </Stack.Navigator>
     )
 }
 
 export default RootNavigator
 
-// component={SearchTopTab}
-//             options={{ title: 'Yêu thích', headerShown: true, header: () =>(
-//                 <MySearchBar />
-//             )}}/>

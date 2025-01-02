@@ -7,6 +7,7 @@ import APIs, { endpoints } from '../../config/APIs';
 import { useEffect, useState } from 'react';
 import { Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useMainCategories } from '../../api/HookCustomer';
 
 export const HomeHeader = () => {
     const nav = useNavigation()
@@ -45,25 +46,13 @@ export const HomeHeader = () => {
 
 export const MainCategory = () => {
 
-    const [main_categories, setMainCategories] = useState([])
-
-    const loadMainCategories = async () => {
-        let res = await APIs.get(endpoints['main_categories'])
-        setMainCategories(res.data)
-        console.log(main_categories)
-    }
-
-    useEffect(() => {
-        loadMainCategories()
-
-    }, [])
-
+    const mainCategories = useMainCategories()
 
     return (
         <View style={{ flex: 1, height: 155 }}>
             <ScrollView horizontal={true} style={CustomerStyles.scrollMainCategories}
                 showsHorizontalScrollIndicator={false}>
-                {main_categories.map((main_c) => (
+                {mainCategories.map((main_c) => (
                     <TouchableOpacity key={main_c.id}  //
                         style={CustomerStyles.itemMainCategories}>
 

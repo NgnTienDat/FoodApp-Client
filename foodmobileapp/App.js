@@ -1,11 +1,12 @@
 
 import { NavigationContainer } from '@react-navigation/native';
 import RootNavigator from './src/navigation/CustomerNavigation';
-import { MyDispatchContext, MyUserContext } from './src/config/UserContexts';
+import { MyDispatchContext, MyUserContext, SearchProvider } from './src/config/UserContexts';
 import { useReducer } from 'react';
 import MyUserReducer from './src/config/UserReducers';
 
 
+import 'react-native-gesture-handler';
 
 
 export const UserProvider = ({ children }) => {
@@ -20,12 +21,15 @@ export const UserProvider = ({ children }) => {
   );
 };
 
+
 export default function App() {
   return (
     <UserProvider>
-      <NavigationContainer>
-        <RootNavigator />
-      </NavigationContainer>
+      <SearchProvider>
+        <NavigationContainer>
+          <RootNavigator />
+        </NavigationContainer>
+      </SearchProvider>
     </UserProvider>
   );
 }

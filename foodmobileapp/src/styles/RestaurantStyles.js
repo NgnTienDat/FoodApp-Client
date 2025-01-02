@@ -85,6 +85,10 @@ export default StyleSheet.create({
         margin: 10,
     },
     switchContainerCustom: { flexDirection: 'row', justifyContent: 'right', alignItems: 'center', padding: 8 },
-
+    scrollViewStyle: {
+        backgroundColor: 'white',
+        margin: 10,
+        height: 300
+    },
 
 });

@@ -35,7 +35,7 @@ const RestaurantMenuFood = ({ navigation }) => {
         return () => clearTimeout(timer);
     }, [restaurantId, q]);
     const refresh = () => {
-        loadFoods();
+        loadMenus();
     }
     const search = (value, callback) => {
         callback(value);
@@ -58,10 +58,12 @@ const RestaurantMenuFood = ({ navigation }) => {
                 renderItem={({ item }) => (
                     <TouchableOpacity style={[RestaurantStyles.dishCard]}
                         key={`${item.id}-${Math.random()}`}
-                    // onPress={() => navigation.navigate('detail_food', {
-                    //     foodId: item.id,
-                    //     onGoBack: () => refresh(),
-                    // })}
+                        onPress={() => navigation.navigate('detail_menu',
+                            {
+                                menuId: item.id,
+                                onGoBack: () => refresh(),
+                            }
+                        )}
                     >
                         <View style={{ flexDirection: 'column', justifyContent: 'space-between', paddingLeft: 10 }}>
                             <Text style={RestaurantStyles.dishName}>{item.name}</Text>
@@ -76,11 +78,13 @@ const RestaurantMenuFood = ({ navigation }) => {
 
             <View >
                 <Button icon="plus" mode="contained" style={[RestaurantStyles.addBtn]}
-                // onPress={() => navigation.navigate('add_food', {
-                //     onGoBack: () => refresh(), // Gọi lại khi quay về
-                // })}
+                    onPress={() => navigation.navigate('add_menu'
+                        , {
+                            onGoBack: () => refresh(), // Gọi lại khi quay về
+                        }
+                    )}
                 >
-                    Thêm món ăn mới
+                    Thêm menu
                 </Button>
             </View>
         </View>

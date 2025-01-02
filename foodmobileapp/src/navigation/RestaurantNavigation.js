@@ -16,6 +16,8 @@ import AddCategory from '../components/restaurant/AddCategory';
 import AddFood from '../components/restaurant/AddFood';
 import DetailCategory from '../components/restaurant/DetailCategory';
 import DetailFood from '../components/restaurant/DetailFood';
+import DetailMenu from '../components/restaurant/DetailMenu';
+import AddMenu from '../components/restaurant/AddMenu';
 
 
 const Tab = createBottomTabNavigator();
@@ -42,6 +44,8 @@ const MenuStackNavigator = ({ navigation }) => {
             <Stack.Screen name="add_food" component={AddFood} options={{ title: 'Thêm món ăn' }} />
             <Stack.Screen name="detail_category" component={DetailCategory} options={{ title: 'Chi tiết danh mục' }} />
             <Stack.Screen name="detail_food" component={DetailFood} options={{ title: 'Chi tiết món ăn' }} />
+            <Stack.Screen name="detail_menu" component={DetailMenu} options={{ title: 'Chi tiết menu' }} />
+            <Stack.Screen name="add_menu" component={AddMenu} options={{ title: 'Thêm menu' }} />
         </Stack.Navigator>
     );
 }

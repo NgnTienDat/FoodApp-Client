@@ -17,7 +17,7 @@ import RegisterScreen from '../screens/auth/Register';
 import RestaurantRegisterScreen from '../screens/auth/RestaurantRegister';
 import { MyUserContext } from '../config/UserContexts';
 import MySearchBar from '../components/customer/SearchingBar';
-import { FoodRoute, RestaurantRoute } from '../screens/customer/Searched';
+
 
 
 const Stack = createNativeStackNavigator()
@@ -52,7 +52,7 @@ function SearchTopTab() {
                     fontWeight: 'bold'
                 },
                 tabBarIndicatorStyle: {
-                    backgroundColor:'#EE4D2D', height: 3, borderRadius:8
+                    backgroundColor: '#EE4D2D', height: 3, borderRadius: 8
                 }
             }}
         >

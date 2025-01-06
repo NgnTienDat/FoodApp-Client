@@ -86,6 +86,118 @@ export default StyleSheet.create({
     },
 
     switchContainerCustom: { flexDirection: 'row', justifyContent: 'right', alignItems: 'center', padding: 8 },
+    scrollViewStyle: {
+        backgroundColor: 'white',
+        margin: 10,
+        height: 300
+    },
+    orderContainer: {
+        backgroundColor: '#fff',
+        padding: 10,
+        margin: 10,
+        borderRadius: 8,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 3,
 
+    },
+    topOrderContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 10,
+    },
+    orderText: {
+        fontSize: 18,
+        color: '#000',
+    },
+    statusText: {
+        fontSize: 14,
+        color: '#FF6600',
+        fontWeight: 'bold',
+    },
+    orderInfoContainer: {
+        marginBottom: 10,
+    },
+    infoText: {
+        fontSize: 14,
+        color: '#666',
+        marginBottom: 2,
+    },
+    receiveOrderBtn: {
+        backgroundColor: '#EE4D2D',
+        borderRadius: 4,
+        alignItems: 'center',
+        margin: 5
+    },
+
+    // 
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    orderDetailContainer: {
+        width: '90%',
+        backgroundColor: '#fff',
+        borderRadius: 10,
+        padding: 20,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.3,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    customerName: {
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+    orderIdStyle: {
+        fontSize: 16,
+        color: '#666',
+    },
+    orderText: {
+        fontSize: 16,
+        marginBottom: 10,
+    },
+    itemText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginBottom: 5,
+    },
+    infoText: {
+        fontSize: 14,
+        color: '#666',
+        marginBottom: 5,
+    }, rejectBtn: {
+        backgroundColor: 'red',
+        paddingVertical: 10,
+        paddingHorizontal: 30,
+        borderRadius: 5,
+    },
+    footer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 20,
+    },
+    btnText: {
+        color: '#fff',
+        fontWeight: 'bold',
+    },
+
+    headerOrder: {
+        backgroundColor: '#fff',
+        margin: 5,
+        padding: 5
+
+    },
+    headerOrderText: {
+        color: 'black',
+        fontWeight: 'bold',
+        fontSize: 18
+    },
 
 });

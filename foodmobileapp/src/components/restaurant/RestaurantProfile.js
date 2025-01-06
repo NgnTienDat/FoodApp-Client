@@ -49,15 +49,15 @@ const RestaurantProfile = () => {
                         <Text style={{ fontSize: 18 }}>👤</Text> Thay đổi thông tin cá nhân
                     </Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={CustomerStyles.menuItem}>
+                {/* <TouchableOpacity style={CustomerStyles.menuItem}>
                     <Text style={CustomerStyles.menuText}>
                         <Text style={{ fontSize: 18 }}>🔒</Text> Đổi mật khẩu
                     </Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
 
                 <TouchableOpacity style={CustomerStyles.menuItem}>
                     <Text style={CustomerStyles.menuText}>
-                        <Text style={{ fontSize: 18 }}>📄</Text> Điều khoản và điều kiện
+                        <Text style={{ fontSize: 18 }}>📄</Text> Tùy chỉnh(Phần này cho chỉnh giá ship)
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={CustomerStyles.logoutButton}>

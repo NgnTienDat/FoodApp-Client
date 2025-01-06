@@ -1,26 +1,66 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { Text, View, ScrollView, Image, TouchableOpacity } from "react-native";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { Icon } from 'react-native-paper';
 import DashBoard from '../screens/restaurant/DashBoard'
 import RestaurantProfile from '../components/restaurant/RestaurantProfile';
 import RestaurantIncome from '../components/restaurant/RestaurantIncome';
 import RestaurantMenu from '../components/restaurant/RestaurantMenu';
-import RestaurantOrder from '../components/restaurant/RestaurantOrder';
+import RestaurantOrder from '../components/restaurant/oder/RestaurantOrder';
 import RestaurantReport from '../components/restaurant/RestaurantReport';
-import RestaurantActiveTime from '../components/restaurant/RestaurantActiveTime';
-import RestaurantMenuFood from '../components/restaurant/RestaurantMenuFood';
-import RestaurantFood from '../components/restaurant/RestaurantFood';
-import RestaurantCategoryFood from '../components/restaurant/RestaurantCategoryFood';
-import AddCategory from '../components/restaurant/AddCategory';
-import AddFood from '../components/restaurant/AddFood';
-import DetailCategory from '../components/restaurant/DetailCategory';
-import DetailFood from '../components/restaurant/DetailFood';
+
+import RestaurantMenuFood from '../components/restaurant/menu/RestaurantMenuFood';
+import RestaurantFood from '../components/restaurant/menu/RestaurantFood';
+import RestaurantCategoryFood from '../components/restaurant/menu/RestaurantCategoryFood';
+import AddCategory from '../components/restaurant/menu/AddCategory';
+import AddFood from '../components/restaurant/menu/AddFood';
+import DetailCategory from '../components/restaurant/menu/DetailCategory';
+import DetailFood from '../components/restaurant/menu/DetailFood';
+import DetailMenu from '../components/restaurant/menu/DetailMenu';
+import AddMenu from '../components/restaurant/menu/AddMenu';
+import OrderCompleted from '../components/restaurant/oder/OrderCompleted';
+import OrderConfirmed from '../components/restaurant/oder/OrderConfirmed';
+import OrderDetail from '../components/restaurant/oder/OrderDetail';
+import ChatRoom from '../components/restaurant/oder/ChatRoom';
 
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
+const TopTab = createMaterialTopTabNavigator();
 
+
+const OrderStackNavigator = ({ navigation }) => {
+    useEffect(() => {
+        navigation.getParent()?.setOptions({
+            tabBarStyle: { display: 'none' }
+        });
+        return () => navigation.getParent()?.setOptions({
+            tabBarStyle: { display: 'flex' }
+        });
+    }, [navigation]);
+
+    //     const timer = setTimeout(() => {
+    //         setHasNewOrder(true); // Khi có đơn mới thì set trạng thái thành true
+    //     }, 5000);
+
+    //     return () => clearTimeout(timer);
+    // }, []);
+    return (
+        <TopTab.Navigator screenOptions={{
+            tabBarLabelStyle: {
+                fontSize: 16,
+            },
+        }}>
+            <TopTab.Screen name="order" component={RestaurantOrder} options={{ headerShown: false, tabBarLabel: 'Đơn mới', }} />
+            <TopTab.Screen name="order_confirmed" component={OrderConfirmed} options={{ headerShown: false, title: 'Đơn đang làm', }} />
+            <TopTab.Screen name="order_completed" component={OrderCompleted} options={{
+                headerShown: false, title: 'Đơn đã đóng',
+            }} />
+        </TopTab.Navigator>
+    );
+}
 
 
 const MenuStackNavigator = ({ navigation }) => {
@@ -43,6 +83,8 @@ const MenuStackNavigator = ({ navigation }) => {
             <Stack.Screen name="add_food" component={AddFood} options={{ title: 'Thêm món ăn' }} />
             <Stack.Screen name="detail_category" component={DetailCategory} options={{ title: 'Chi tiết danh mục' }} />
             <Stack.Screen name="detail_food" component={DetailFood} options={{ title: 'Chi tiết món ăn' }} />
+            <Stack.Screen name="detail_menu" component={DetailMenu} options={{ title: 'Chi tiết menu' }} />
+            <Stack.Screen name="add_menu" component={AddMenu} options={{ title: 'Thêm menu' }} />
         </Stack.Navigator>
     );
 }
@@ -54,15 +96,16 @@ const StackNavigator = () => {
         <Stack.Navigator >
             <Stack.Screen name="home" component={DashBoard} options={{ headerShown: false }} />
             <Stack.Screen name="index_menu" component={MenuStackNavigator} options={{ headerShown: false }} />
-            <Stack.Screen name="order" component={RestaurantOrder} options={{ title: 'Đơn hàng' }} />
+            <Stack.Screen name="index_order" component={OrderStackNavigator} options={{ title: 'Đơn hàng' }} />
             <Stack.Screen name="report" component={RestaurantReport} options={{ title: 'Báo cáo' }} />
-            {/* <Stack.Screen name="active_time" component={RestaurantActiveTime} options={{ title: 'Giờ hoạt động' }} /> */}
+            <Stack.Screen name="order_detail" component={OrderDetail} options={{ title: 'Chi tiết đơn hàng' }} />
+            <Stack.Screen name="chat_room" component={ChatRoom} options={{ headerShown: false, title: 'Tin nhắn' }} />
         </Stack.Navigator>
     );
 }
 const RestaurantNavigation = () => {
     return (
-        <Tab.Navigator >
+        <Tab.Navigator  >
             <Tab.Screen name="index" component={StackNavigator} options={{ headerShown: false, title: 'Trang chủ', tabBarIcon: () => <Icon source="home-outline" size={30} /> }} />
             <Tab.Screen name="profile" component={RestaurantIncome} options={{ title: 'Thu nhập', tabBarIcon: () => <Icon source="wallet-outline" size={30} /> }} />
             <Tab.Screen name="income" component={RestaurantProfile} options={{ headerShown: false, title: 'Tôi', tabBarIcon: () => <Icon source="account-outline" size={30} /> }} />

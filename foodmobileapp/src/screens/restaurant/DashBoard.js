@@ -49,6 +49,21 @@ const DashBoard = ({ navigation }) => {
         }
     }
 
+    const statusRestaurant = async () => {
+        setLoading(true);
+        try {
+            let res = await RestaurantAPIs.post(endpoints['statusRestaurant'](restaurantId))
+            setRestaurant((prevState) => ({
+                ...prevState,
+                active: res.data.active,
+            }));
+        } catch (ex) {
+            console.error('aaaaa' + ex);
+        } finally {
+            setLoading(false);
+        }
+    }
+
     useEffect(() => {
         loadRestaurant();
     }, [restaurantId]);
@@ -83,8 +98,8 @@ const DashBoard = ({ navigation }) => {
 
             {/* close-open store */}
             <View style={RestaurantStyles.switchContainer}>
-                <Text style={RestaurantStyles.switchLabel}>Mở cửa</Text>
-                <Switch value={isOpen} onValueChange={setIsOpen} />
+                <Text style={RestaurantStyles.switchLabel}>{restaurant.active ? 'Mở cửa' : 'Đóng cửa'}</Text>
+                <Switch value={restaurant.active} onValueChange={statusRestaurant} />
             </View>
 
             {/* control */}
@@ -105,7 +120,7 @@ const DashBoard = ({ navigation }) => {
                     <Text style={RestaurantStyles.iconText}>Báo cáo</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={RestaurantStyles.menuItem}
-                    onPress={() => navigation.navigate('order')}>
+                    onPress={() => navigation.navigate('index_order')}>
                     <Icon source="food-outline" size={30} />
                     <Text style={RestaurantStyles.iconText}>Đơn hàng</Text>
                 </TouchableOpacity>

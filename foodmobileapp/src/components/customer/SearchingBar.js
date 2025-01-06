@@ -3,32 +3,33 @@ import CustomerStyles from "../../styles/CustomerStyles"
 import { Icon } from "react-native-paper"
 import { HeaderBackButton } from '@react-navigation/elements';
 import { useNavigation } from "@react-navigation/native";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import APIs, { endpoints } from "../../config/APIs";
+import { SearchContext } from "../../config/UserContexts";
 
 const MySearchBar = () => {
     const nav = useNavigation()
     const [querySearch, setQuerySearch] = useState('')
+    const {searchKeyWord, setSearchKeyWord} = useContext(SearchContext)
     const [result, setResult] = useState([])
     const [loading, setLoading] = useState(false)
     const [page, setPage] = useState(1)
 
     const searchFood = async () => {
         console.info("here1");
-        if (!querySearch.trim()) return
+        if (!searchKeyWord.trim()) return
         try {
             setLoading(true)
             console.info("here2");
 
-            let url = `${endpoints['search-food']}?name=${querySearch}`
-            // let url = `${endpoints['foods']}?name=${querySearch}`
+            let url = `${endpoints['search-food']}?name=${searchKeyWord}`
             console.info("URL", url);
 
             let res = await APIs.get(url)
 
 
             console.info("API Response:", res.data);
-            console.info("QuerySEarch:", querySearch);
+            console.info("QuerySEarch:", searchKeyWord);
             nav.navigate('SearchedScreen', {foods: res.data })
             setResult(res.data);
 
@@ -40,8 +41,8 @@ const MySearchBar = () => {
         }
     }
     const handleSearch = () => {
-        Alert.alert('Tìm kiếm', `Bạn đã tìm: ${querySearch}`);
-        // Thực hiện logic tìm kiếm ở đây (gọi API, điều hướng, v.v.)
+        Alert.alert('Tìm kiếm', `Bạn đã tìm: ${searchKeyWord}`);
+        // Thực hiện logic tìm kiếm ở đây (gọi API, điều hướng, ...)
     };
 
 
@@ -57,9 +58,9 @@ const MySearchBar = () => {
                         style={CustomerStyles.searchText}
                         placeholder="Bánh Mì Chim Chay Giảm 50%"
                         placeholderTextColor="#999"
+                        value={searchKeyWord}
+                        onChangeText={setSearchKeyWord}
                         onSubmitEditing={searchFood}
-                        onChangeText={setQuerySearch}
-                        value={querySearch}
                     />
 
                 </View>

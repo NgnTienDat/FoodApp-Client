@@ -40,7 +40,7 @@ export default StyleSheet.create({
 
   },
   addressContainer: {
-    marginBottom: 8, 
+    marginBottom: 8,
 
   },
   accountHeaderContainer: {
@@ -184,18 +184,107 @@ export default StyleSheet.create({
   loginInput: {
     width: "100%",
     marginBottom: 20,
-    backgroundColor: "#fff", 
+    backgroundColor: "#fff",
   },
   loginButton: {
-    flexDirection:'row',
+    flexDirection: 'row',
     backgroundColor: "#FF5722",
     paddingVertical: 15,
     borderRadius: 8,
     width: "100%",
     alignItems: "center",
     marginBottom: 20,
-    justifyContent:'center'
-  }
+    justifyContent: 'center'
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+
+  restaurantContainer: {
+    marginBottom: 5,
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 3,
+    padding: 10
+  },
+  restaurantName: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  itemContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+    paddingLeft: 80,
+  },
+  itemImage: {
+    width: 60,
+    height: 60,
+    borderRadius: 5,
+
+    marginRight: 10,
+    borderWidth: 1, borderColor: '#f5f5f5'
+  },
+  itemInfo: {
+    flex: 1,
+  },
+  itemName: {
+    fontSize: 14,
+    fontWeight: "bold",
+  },
+  itemPrice: {
+    fontSize: 12,
+    color: "#666",
+  },
+
+  restaurantImage: {
+    width: 90,
+    height: 90,
+    borderRadius: 20,
+    marginRight: 10,
+
+  },
+  restaurantDetails: {
+    fontSize: 12,
+    color: "#777",
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginVertical: 8,
+    marginLeft: 17,
+},
+optionsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginBottom: 16,
+    marginHorizontal: 10
+},
+option: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 20,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    margin: 4,
+},
+optionSelected: {
+    backgroundColor: '#EE4D2D',
+},
+optionText: {
+    color: '#000',
+},
+optionTextSelected: {
+    color: '#fff',
+    fontWeight: 'bold',
+},
 
 });
 

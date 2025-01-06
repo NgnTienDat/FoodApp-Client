@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { View, Text, Alert } from "react-native";
 import { TextInput, Button } from 'react-native-paper';
-import RestaurantStyles from "../../styles/RestaurantStyles";
-import RestaurantAPIs, { endpoints } from "../../config/RestaurantAPIs";
+import RestaurantStyles from "../../../styles/RestaurantStyles";
+import RestaurantAPIs, { endpoints } from "../../../config/RestaurantAPIs";
 
 
 const AddCategory = ({ route, navigation }) => {

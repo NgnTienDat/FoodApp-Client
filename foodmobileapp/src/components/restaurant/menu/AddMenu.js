@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { View, Text, FlatList, Alert, TouchableOpacity, RefreshControl, } from "react-native";
 import { Button, TextInput, Checkbox } from "react-native-paper";
-import RestaurantStyles from "../../styles/RestaurantStyles";
-import RestaurantAPIs, { endpoints } from "../../config/RestaurantAPIs";
+import RestaurantStyles from "../../../styles/RestaurantStyles";
+import RestaurantAPIs, { endpoints } from "../../../config/RestaurantAPIs";
 import DropDownPicker from 'react-native-dropdown-picker';
 
 const AddMenu = ({ navigation, route }) => {

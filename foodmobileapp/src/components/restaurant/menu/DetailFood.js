@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, ScrollView, Switch, Image, Alert } from "react-native";
 import { TextInput, Button } from 'react-native-paper';
-import RestaurantStyles from "../../styles/RestaurantStyles";
+import RestaurantStyles from "../../../styles/RestaurantStyles";
 import DropDownPicker from 'react-native-dropdown-picker';
 import * as ImagePicker from 'expo-image-picker';
-import RestaurantAPIs, { endpoints } from "../../config/RestaurantAPIs";
+import RestaurantAPIs, { endpoints } from "../../../config/RestaurantAPIs";
 
 
 
@@ -163,6 +163,11 @@ const DetailFood = ({ navigation, route }) => {
                 Alert.alert('Thành công', 'Món ăn mới đã được cập nhật!');
                 if (onGoBack) onGoBack();
                 navigation.goBack();
+                // Alert.alert(
+                //     "Thành công",
+                //     "Đơn hàng đã được xác nhận giao hàng!",
+                //     [{ text: "OK", onPress: () => navigation.goBack() }]
+                // );
             }
 
         } catch (ex) {

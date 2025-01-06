@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { View, Text, FlatList, RefreshControl, Switch, TouchableOpacity, Image, ActivityIndicator } from "react-native";
 import { Searchbar, Button } from "react-native-paper";
-import RestaurantStyles from "../../styles/RestaurantStyles";
-import RestaurantAPIs, { endpoints } from "../../config/RestaurantAPIs";
-import CustomerStyles from '../../styles/CustomerStyles';
+import RestaurantStyles from "../../../styles/RestaurantStyles";
+import RestaurantAPIs, { endpoints } from "../../../config/RestaurantAPIs";
+import CustomerStyles from '../../../styles/CustomerStyles';
 
 const RestaurantMenuFood = ({ navigation }) => {
     const restaurantId = 1

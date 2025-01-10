@@ -23,6 +23,9 @@ export const endpoints = {
 
     getOrder: '/orders/',
     statusOrder: orderId => `/orders/${orderId}/`,
+
+    createRestaurant: '/restaurants/',
+    createResUser: '/users/'
 };
 
 const RestaurantAPIs = axios.create({

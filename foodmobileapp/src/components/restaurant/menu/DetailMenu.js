@@ -4,6 +4,8 @@ import { Button, TextInput, Checkbox } from "react-native-paper";
 import RestaurantStyles from "../../../styles/RestaurantStyles";
 import RestaurantAPIs, { endpoints } from "../../../config/RestaurantAPIs";
 import DropDownPicker from 'react-native-dropdown-picker';
+import { useContext } from "react";
+import { MyUserContext } from "../../../config/UserContexts";
 
 
 const Detail = ({ navigation, route }) => {
@@ -53,7 +55,8 @@ const Detail = ({ navigation, route }) => {
 
     // check
     const [checkedFoods, setCheckedFoods] = useState({});
-    const restaurantId = 1
+    const user = useContext(MyUserContext)
+    const restaurantId = user.restaurant_id
     const [page, setPage] = useState(1);
     const [foods, setFoods] = useState([]);
 

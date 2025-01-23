@@ -4,17 +4,21 @@ import { useState, useEffect, useCallback } from "react";
 import RestaurantAPIs, { endpoints } from "../../../config/RestaurantAPIs";
 import { useFocusEffect } from '@react-navigation/native';
 import OrderList from "./OrderList";
+import { useContext } from "react";
+import { MyUserContext } from "../../../config/UserContexts";
 
 const RestaurantOrder = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [loading, setLoading] = useState(false);
     const [orders, setOrders] = useState([]);
     const [selectedOrder, setSelectedOrder] = useState(null);
+    const user = useContext(MyUserContext)
+    const restaurantId = user.restaurant_id
 
     const loadOrder = async () => {
         setLoading(true);
         try {
-            let res = await RestaurantAPIs.get(endpoints['getOrder']);
+            let res = await RestaurantAPIs.get(endpoints['getRestaurantOrder'](restaurantId));
             // console.info(res.data);
             const filterOrders = res.data.filter(o => o.delivery_status === "Chờ xác nhận")
             setOrders(filterOrders);

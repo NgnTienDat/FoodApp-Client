@@ -4,12 +4,15 @@ import RestaurantStyles from "../../styles/RestaurantStyles";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Icon } from 'react-native-paper';
 import RestaurantAPIs, { endpoints } from "../../config/RestaurantAPIs";
+import { useContext } from "react";
+import { MyDispatchContext, MyUserContext } from "../../config/UserContexts";
 
 const DashBoard = ({ navigation }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [restaurant, setRestaurant] = useState([]);
-    const restaurantId = 1
+    const user = useContext(MyUserContext)
+    const restaurantId = user.restaurant_id
     const [page, setPage] = useState(1);
     const [foods, setFoods] = useState([]);
 

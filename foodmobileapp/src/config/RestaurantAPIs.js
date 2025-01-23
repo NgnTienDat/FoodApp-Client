@@ -21,11 +21,16 @@ export const endpoints = {
 
     statusRestaurant: restaurantId => `/restaurants/${restaurantId}/inactive-restaurant/`,
 
-    getOrder: '/orders/',
+    getRestaurantOrder: restaurantId => `/restaurants/${restaurantId}/orders/`,
     statusOrder: orderId => `/orders/${orderId}/`,
 
     createRestaurant: '/restaurants/',
-    createResUser: '/users/'
+    createResUser: '/users/',
+
+    categoryReport: restaurantId => `/restaurants/${restaurantId}/category_report/`,
+    foodReport: restaurantId => `/restaurants/${restaurantId}/food_report/`,
+
+    login: '/o/token/',
 };
 
 const RestaurantAPIs = axios.create({

@@ -5,13 +5,16 @@ import RestaurantStyles from "../../../styles/RestaurantStyles";
 import DropDownPicker from 'react-native-dropdown-picker';
 import * as ImagePicker from 'expo-image-picker';
 import RestaurantAPIs, { endpoints } from "../../../config/RestaurantAPIs";
+import { useContext } from "react";
+import { MyUserContext } from "../../../config/UserContexts";
 
 
 
 const DetailFood = ({ navigation, route }) => {
     const [isOpen, setIsOpen] = useState(false);
     const { foodId, onGoBack } = route.params || {};
-    const restaurantId = 1
+    const user = useContext(MyUserContext)
+    const restaurantId = user.restaurant_id
     const [loading, setLoading] = useState(false);
     const [food, setFood] = useState({
         "name": "",

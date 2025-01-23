@@ -39,9 +39,18 @@ const LoginScreen = () => {
             setLoading(true)
             // dùng qs.stringify để mã hóa data từ object thành dạng application/x-www-form-urlencoded
             // vì làm giống thầy nó trả về 400 bad request là gửi dạng JSON
+            // DAT LOGIN
+            // const loginData = QueryString.stringify({
+            //     'client_id': 'QvhI26LJ0bwHurLgrMoEYRy5OPeMrMLbmGLtZxGE',
+            //     'client_secret': 'Muy7Hq81uX5ElvZTT3zMr84CkzreJ4qXZsiTc7OYYwMCrNAL6UxZTeztJRri2mGxihlT2yDaqX9ZDpCbmx2FBkKBTWEwJ0dZzOeGaxSKG001yxXpodHBpXwk6DvVVmCY',
+            //     'grant_type': 'password',
+            //     ...user
+            // })
+
+            //TRUNG LOGIN - Không dùng thì comment lại
             const loginData = QueryString.stringify({
-                'client_id': 'QvhI26LJ0bwHurLgrMoEYRy5OPeMrMLbmGLtZxGE',
-                'client_secret': 'Muy7Hq81uX5ElvZTT3zMr84CkzreJ4qXZsiTc7OYYwMCrNAL6UxZTeztJRri2mGxihlT2yDaqX9ZDpCbmx2FBkKBTWEwJ0dZzOeGaxSKG001yxXpodHBpXwk6DvVVmCY',
+                'client_id': 'tBZYBXHl1QfqB5po2PMgN0AEKaP6scK8PYftPtAQ',
+                'client_secret': 'CGU3AkafQg2nQ5YXwnokMhvojZmpeh9mpaQAanPnx8IqX8bXG5HCl2ug3kqbkB4VFhPbJQ3f4co5yYUJNn8APa0P0JHzuuvtuoHwmIcbNJdskyFheVJo5J6tryac6r8q',
                 'grant_type': 'password',
                 ...user
             })
@@ -69,7 +78,17 @@ const LoginScreen = () => {
 
             console.log(typeof resolvedData); // Output object
 
-            nav.navigate('MainTabs');
+            if (resolvedData && resolvedData.role) {
+                if (resolvedData.role === "customer") {
+                    nav.navigate('MainTabs');
+                }
+                if (resolvedData.role === "restaurant-user") {
+                    nav.navigate('MyRestaurant');
+                }
+            } else {
+                console.error("Không tìm thấy role trong dữ liệu người dùng.");
+            }
+
 
 
 

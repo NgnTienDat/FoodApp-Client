@@ -4,10 +4,13 @@ import RestaurantStyles from "../../../styles/RestaurantStyles";
 import CustomerStyles from '../../../styles/CustomerStyles';
 import { useState, useEffect } from "react";
 import RestaurantAPIs, { endpoints } from "../../../config/RestaurantAPIs";
+import { useContext } from "react";
+import { MyUserContext } from "../../../config/UserContexts";
 
 const RestaurantFood = ({ navigation }) => {
     const [loading, setLoading] = useState(false)
-    const restaurantId = 1
+    const user = useContext(MyUserContext)
+    const restaurantId = user.restaurant_id
     const [page, setPage] = useState(1);
     const [foods, setFoods] = useState([]);
     const [q, setQ] = useState("");

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { View, Text, SectionList } from "react-native";
+import { View, Text, SectionList, ActivityIndicator } from "react-native";
 import moment from "moment";
 import "moment/locale/vi";
 moment.locale("vi");
@@ -15,6 +15,7 @@ const RestaurantReport = ({ navigation }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedReport, setSelectedReport] = useState({ typeReport: "food", timeReport: "day" });
     const [groupedData, setGroupedData] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     const openChooseTable = () => setModalVisible(true);
     const closeModal = () => setModalVisible(false);
@@ -72,15 +73,24 @@ const RestaurantReport = ({ navigation }) => {
     };
 
     const loadReport = async () => {
-        if (selectedReport.typeReport === "food") {
-            const res = await RestaurantAPIs.get(endpoints["foodReport"](restaurantId));
-            const groupedData = groupDataByTime(res.data, selectedReport.timeReport);
-            setGroupedData(groupedData);
+        setLoading(true);
+        try {
+            if (selectedReport.typeReport === "food") {
+                const res = await RestaurantAPIs.get(endpoints["foodReport"](restaurantId));
+                const groupedData = groupDataByTime(res.data, selectedReport.timeReport);
+                setGroupedData(groupedData);
+            }
+            if (selectedReport.typeReport === "category") {
+                const res = await RestaurantAPIs.get(endpoints["categoryReport"](restaurantId));
+                const groupedData = groupDataByTime(res.data, selectedReport.timeReport, true);
+                setGroupedData(groupedData);
+            }
+
         }
-        if (selectedReport.typeReport === "category") {
-            const res = await RestaurantAPIs.get(endpoints["categoryReport"](restaurantId));
-            const groupedData = groupDataByTime(res.data, selectedReport.timeReport, true);
-            setGroupedData(groupedData);
+        catch (ex) {
+            console.error('lỗi' + ex);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -102,6 +112,7 @@ const RestaurantReport = ({ navigation }) => {
 
     return (
         <View style={{ flex: 1 }}>
+
             <View style={RestaurantStyles.chartContainer}>
                 <ModalChoose
                     modalVisible={modalVisible}
@@ -114,6 +125,9 @@ const RestaurantReport = ({ navigation }) => {
                         selectedReport.timeReport === 'month' ? 'theo tháng' :
                             selectedReport.timeReport === 'period' ? 'theo quý' : 'theo năm'}
                 </Text>
+                <View>
+                    {loading && <ActivityIndicator />}
+                </View>
                 <SectionList
                     sections={groupedData}
                     keyExtractor={(item, index) => `${item.food__name}-${index}`}

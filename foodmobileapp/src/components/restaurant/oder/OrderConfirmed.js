@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { View, Text, ScrollView, Modal, TouchableOpacity, Alert, FlatList } from 'react-native';
+import { View, Text, ActivityIndicator, Modal, TouchableOpacity, Alert, FlatList } from 'react-native';
 import RestaurantAPIs, { endpoints } from "../../../config/RestaurantAPIs";
 import { useFocusEffect } from '@react-navigation/native';
 import RestaurantStyles from "../../../styles/RestaurantStyles";
@@ -92,32 +92,32 @@ const OrderConfirmed = ({ navigation }) => {
 
     return (
         <View>
-            {loading ? (
-                <Text></Text>
-            ) : (
-                <FlatList
-                    data={orders}
-                    keyExtractor={(item, index) => `order-${index}`}
-                    renderItem={({ item }) => (
-                        <TouchableOpacity onPress={() => navigation.navigate('order_detail', {
-                            orderId: item.id,
-                        })}>
-                            <View style={RestaurantStyles.orderContainer}>
-                                <View style={RestaurantStyles.topOrderContainer}>
-                                    <Text style={[RestaurantStyles.orderText, { fontWeight: 'bold' }]}>{item.user_name}</Text>
-                                    <Text style={RestaurantStyles.statusText}>{item.delivery_status}</Text>
-                                </View>
-
-                                <View style={RestaurantStyles.orderInfoContainer}>
-                                    <Text style={RestaurantStyles.infoText}>Mã đơn: {item.id} (Chưa thanh toán)</Text>
-                                    <Text style={RestaurantStyles.infoText}>Số món: {item.order_details.length}</Text>
-                                    <Text style={RestaurantStyles.infoText}>Địa chỉ: {item.shipping_address ? item.shipping_address : 'ABC, 123, Quận 1, HCM'}</Text>
-                                </View>
+            <View>
+                {loading && <ActivityIndicator />}
+            </View>
+            <FlatList
+                data={orders}
+                keyExtractor={(item, index) => `order-${index}`}
+                renderItem={({ item }) => (
+                    <TouchableOpacity onPress={() => navigation.navigate('order_detail', {
+                        orderId: item.id,
+                    })}>
+                        <View style={RestaurantStyles.orderContainer}>
+                            <View style={RestaurantStyles.topOrderContainer}>
+                                <Text style={[RestaurantStyles.orderText, { fontWeight: 'bold' }]}>{item.user_name}</Text>
+                                <Text style={RestaurantStyles.statusText}>{item.delivery_status}</Text>
                             </View>
-                        </TouchableOpacity>
-                    )}
-                />
-            )}
+
+                            <View style={RestaurantStyles.orderInfoContainer}>
+                                <Text style={RestaurantStyles.infoText}>Mã đơn: {item.id} (Chưa thanh toán)</Text>
+                                <Text style={RestaurantStyles.infoText}>Số món: {item.order_details.length}</Text>
+                                <Text style={RestaurantStyles.infoText}>Địa chỉ: {item.shipping_address ? item.shipping_address : 'ABC, 123, Quận 1, HCM'}</Text>
+                            </View>
+                        </View>
+                    </TouchableOpacity>
+                )}
+            />
+
         </View>
     );
 }

@@ -47,7 +47,7 @@ const LoginScreen = () => {
             //     ...user
             // })
 
-            //TRUNG LOGIN - Không dùng thì comment lại
+            // TRUNG LOGIN - Không dùng thì comment lại
             const loginData = QueryString.stringify({
                 'client_id': 'IAxWoaNARM6sxC95v3VrfNa8w6MzWc6LLWrA7rZf',
                 'client_secret': 'LZtLFRzPH1oGFW9eDaY77Bcol7RPy1T5h5BWxoIR1puFi2vpyvOZngulwnhSmclSYWLdBFQ0pAQNWzgfwK9C7LpMwiNtPtfM3HOQ7rbaWGVhTNI4RYbGbgJZmiLkHx2F',
@@ -75,16 +75,6 @@ const LoginScreen = () => {
             dispatch({ 'type': 'login', 'payload': resolvedData })
             // console.info("SAU DISPATCH: \n")
 
-
-            if (resolvedData.role === 'customer') {
-                nav.navigate('MainTabs')
-            } else {
-                Alert.alert("Thông báo", "Bạn không có quyền truy cập vào ứng dụng này!")
-            }
-
-<<<<<<< HEAD
-            // nav.navigate('MainTabs')
-=======
             if (resolvedData && resolvedData.role) {
                 if (resolvedData.role === "customer") {
                     nav.navigate('MainTabs');
@@ -93,10 +83,11 @@ const LoginScreen = () => {
                     nav.navigate('MyRestaurant');
                 }
             } else {
+                Alert.alert("Thông báo", "Bạn không có quyền truy cập vào ứng dụng này!")
                 console.error("Không tìm thấy role trong dữ liệu người dùng.");
             }
 
->>>>>>> main
+
 
 
 

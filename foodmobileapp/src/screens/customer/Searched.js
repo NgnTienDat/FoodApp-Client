@@ -89,14 +89,12 @@ const SearchedScreen = ({ route }) => {
     const { foods } = route.params;
     console.log('foods: ', foods)
     const tabsForFoods = [
-        { name: "Món ăn / Nhà hàng", component: () => <FoodRoute foods={foods} /> },
+        { name: "Món ăn", component: () => <FoodRoute foods={foods} /> },
+        { name: "Nhà hàng", component: () => <RestaurantRoute/> },
         
     ];
     return (
         <View style={{ flex: 1 }}>
-
-
-
             <TopTab tabs={tabsForFoods} />
         </View>
 

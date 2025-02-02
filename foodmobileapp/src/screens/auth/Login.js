@@ -52,7 +52,7 @@ const LoginScreen = () => {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 }
             })
-            console.info(res.data)
+            // console.info(res.data)
 
             await AsyncStorage.setItem('token', res.data.access_token)
 
@@ -60,16 +60,20 @@ const LoginScreen = () => {
             const authTokenApi = await authApis()
             const currentUser = await authTokenApi.get(endpoints['current-user'])
             const resolvedData = currentUser.data
+            console.log('Current USER: ', currentUser.data)
 
-
-            console.info("TRƯỚC DISPATCH: \n", resolvedData)
+            // console.info("TRƯỚC DISPATCH: \n", resolvedData)
             dispatch({ 'type': 'login', 'payload': resolvedData })
-            console.info("SAU DISPATCH: \n")
+            // console.info("SAU DISPATCH: \n")
 
 
-            console.log(typeof resolvedData); // Output object
+            if (resolvedData.role === 'customer') {
+                nav.navigate('MainTabs')
+            } else {
+                Alert.alert("Thông báo", "Bạn không có quyền truy cập vào ứng dụng này!")
+            }
 
-            nav.navigate('MainTabs');
+            // nav.navigate('MainTabs')
 
 
 
@@ -89,16 +93,23 @@ const LoginScreen = () => {
             justifyContent: "center", // Căn giữa theo trục chính, mặc định là chiều dọc
             alignItems: 'center',  // Căn giữa theo trục phụ, mặc định chiều ngang
             padding: 20,
+            position: 'relative'
         }}>
-
-            {Object.values(users).map(u => <TextInput
-                key={u.field}
-                secureTextEntry={u.secure}
-                mode="outlined"
-                style={CustomerStyles.loginInput}
-                placeholder={u.title}
-                value={user[u.field]}
-                onChangeText={t => updateUser(t, u.field)} />)}
+            <TouchableOpacity style={{ position: 'absolute', zIndex: 1, bottom: 70, }}
+                onPress={() => nav.navigate('MainTabs')}
+            >
+                <Text style={{ color: "#1d5aff" }}>Đi tới trang chủ</Text>
+            </TouchableOpacity>
+            {
+                Object.values(users).map(u => <TextInput
+                    key={u.field}
+                    secureTextEntry={u.secure}
+                    mode="outlined"
+                    style={CustomerStyles.loginInput}
+                    placeholder={u.title}
+                    value={user[u.field]}
+                    onChangeText={t => updateUser(t, u.field)} />)
+            }
 
 
             <TouchableOpacity onPress={login} loading={loading} style={CustomerStyles.loginButton}>
@@ -122,7 +133,7 @@ const LoginScreen = () => {
                 </TouchableOpacity>
             </View>
 
-        </View>
+        </View >
 
     )
 }

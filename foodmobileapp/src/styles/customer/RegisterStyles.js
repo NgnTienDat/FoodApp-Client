@@ -10,7 +10,8 @@ export default StyleSheet.create({
     },
     RegisterInput: {
         width: "100%",
-        marginBottom: 20,
+        marginBottom: 2,
+        marginTop: 15,
         backgroundColor: "#fff",
     },
     RegisterButton: {
@@ -20,7 +21,7 @@ export default StyleSheet.create({
         borderRadius: 8,
         width: "100%",
         alignItems: "center",
-        marginBottom: 20,
+        marginVertical: 20,
         justifyContent: 'center'
     },
     AvatarButton: {
@@ -39,7 +40,7 @@ export default StyleSheet.create({
     AvatarPreview: {
         width: 100,
         height: 100,
-        borderRadius: 50,
+        borderRadius: 20,
         borderWidth: 2,
         borderColor: "#1976D2",
         marginTop: 10,
@@ -52,7 +53,8 @@ export default StyleSheet.create({
         borderWidth: 1, // Độ dày viền
         borderColor: "#BDBDBD", // Màu viền
         alignItems: "center", // Căn giữa nội dung theo trục ngang
-        marginBottom: 10, // Khoảng cách dưới
+        marginRight: 10, // Khoảng cách dưới
+        height: 43,
     },
     ChooseImageText: {
         color: "#000", // Màu chữ

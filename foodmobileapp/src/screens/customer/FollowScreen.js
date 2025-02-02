@@ -2,14 +2,21 @@ import { Button, Text, TextInput, TouchableOpacity, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import CustomerStyles from "../../styles/CustomerStyles"
 import { Icon } from "react-native-paper"
+import CartIcon from "../../components/customer/Cart"
+import { useState } from "react"
+
 
 
 const FollowScreen = () => {
+   const [restaurants, setRestaurants] = useState([])
+    
     return (
         <SafeAreaView>
             <View>
-            <Text>các nhà hàng đang theo dõi</Text>
-
+            <Text>các nhà hàng đang theo dõi jhasd</Text>
+           
+           
+            
             </View>
         </SafeAreaView>
 

@@ -43,9 +43,10 @@ const RestaurantProfile = ({ navigation }) => {
             </View>
 
             <View>
-                <TouchableOpacity style={CustomerStyles.menuItem}>
+                <TouchableOpacity style={CustomerStyles.menuItem}
+                    onPress={() => navigation.navigate('restaurant_location')}>
                     <Text style={CustomerStyles.menuText}>
-                        <Text style={{ fontSize: 18 }}>⚙️</Text> Cài đặt
+                        <Text style={{ fontSize: 18 }}>📍</Text> Vị trí của tôi
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={CustomerStyles.menuItem}

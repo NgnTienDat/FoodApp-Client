@@ -16,7 +16,7 @@ const AccountScreen = () => {
     const user = useContext(MyUserContext)
     
     const dispatch = useContext(MyDispatchContext)
-    console.log("Giá trị user trong AccountScreen:\n", user);
+    // console.log("Giá trị user trong AccountScreen:\n", user);
     return (
         <SafeAreaView style={CustomerStyles.safeArea}>
             <View>

@@ -16,7 +16,7 @@ const TopTab = ({ tabs }) => {
                 tabBarIndicatorStyle: {
                     backgroundColor: '#EE4D2D', height: 3, borderRadius: 8
                 },
-                tabBarScrollEnabled: false,
+                tabBarScrollEnabled: true,
             }}
         >
 

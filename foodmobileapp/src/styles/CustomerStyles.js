@@ -4,6 +4,21 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f8f9fa", //
+    position: 'relative'
+  },
+  cartPosition: {
+    position: 'absolute',
+    top: 650,
+    right: 20,
+    zIndex: 100,
+    backgroundColor: '#fff',
+    width: 50,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+   
+    elevation: 5,
   },
   row: {
     flexDirection: "row",
@@ -41,7 +56,7 @@ export default StyleSheet.create({
   },
   addressContainer: {
     marginBottom: 8,
-
+    // backgroundColor: '#ccc'
   },
   accountHeaderContainer: {
     marginBottom: 8, flexDirection: 'row'
@@ -144,8 +159,13 @@ export default StyleSheet.create({
     marginTop: 10,
   },
   itemMainCategories: {
-
-    backgroundColor: '#f8f9fa', alignItems: 'center', marginRight: 25, height: 100
+    backgroundColor: '#f8f9fa',
+    alignItems: 'center', 
+    marginRight: 15, 
+    height: 100, 
+    elevation: 5, 
+    borderRadius: 15, 
+    paddingHorizontal: 5
   },
   scrollMainCategories: {
     flex: 1,
@@ -167,7 +187,8 @@ export default StyleSheet.create({
   },
   flatListNearRestaurant: {
     flexDirection: "row", padding: 10,
-    borderRadius: 8, backgroundColor: '#fff', marginBottom: 10,
+    borderRadius: 8, backgroundColor: '#fff', marginBottom: 5,
+    
   },
   flatListNearRestaurantImage: {
     width: 100, height: 100, borderRadius: 5
@@ -260,31 +281,31 @@ export default StyleSheet.create({
     fontWeight: 'bold',
     marginVertical: 8,
     marginLeft: 17,
-},
-optionsContainer: {
+  },
+  optionsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     marginBottom: 16,
     marginHorizontal: 10
-},
-option: {
+  },
+  option: {
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 20,
     paddingVertical: 8,
     paddingHorizontal: 16,
     margin: 4,
-},
-optionSelected: {
+  },
+  optionSelected: {
     backgroundColor: '#EE4D2D',
-},
-optionText: {
+  },
+  optionText: {
     color: '#000',
-},
-optionTextSelected: {
+  },
+  optionTextSelected: {
     color: '#fff',
     fontWeight: 'bold',
-},
+  },
 
 });
 

@@ -1,8 +1,12 @@
-import { useEffect, useState } from "react"
-import APIs, { endpoints } from "../../config/APIs"
-import { FlatList, Image, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from "react-native"
+import { useContext, useEffect, useState } from "react"
+import APIs, { authApis, endpoints } from "../../config/APIs"
+import { FlatList, Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { HomeHeader, MainCategory } from "../../components/customer/HomeHeader"
 import CustomerStyles from "../../styles/CustomerStyles"
+import { useIsFocused, useNavigation } from "@react-navigation/native"
+import RestaurantItem from "../../components/customer/RestaurantItem"
+import CartIcon from "../../components/customer/Cart"
+import { MyUserContext } from "../../config/UserContexts"
 
 
 
@@ -11,6 +15,37 @@ const HomeScreen = () => {
     const [restaurants, setRestaurants] = useState([])
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(1);
+    const nav = useNavigation()
+    const user = useContext(MyUserContext)
+    const [cart, setCart] = useState(null)
+    const [cartItemNumbers, setCartItemNumbers] = useState(0)
+    const isFocused = useIsFocused()
+
+
+    const getMyCart = async () => {
+        try {
+            if (!user) {
+                return
+            }
+            const authTokenApi = await authApis()
+            const myCart = await authTokenApi.get(endpoints['my-cart'])
+
+
+            console.info('MY CART: ', myCart.data)
+
+            setCartItemNumbers(myCart.data.items_number, 0)
+            setCart(myCart.data)
+
+        } catch (error) {
+            console.info(error)
+            setCartItemNumbers(0)
+        }
+    }
+    useEffect(() => {
+        if (isFocused) {     
+            getMyCart();
+        }
+    }, [isFocused]);
 
 
     const loadRestaurants = async () => {
@@ -46,34 +81,37 @@ const HomeScreen = () => {
     }
     return (
 
-        <View style={CustomerStyles.container}>
+        <View style={CustomerStyles.container}>   
             <HomeHeader />
+            {user && cart &&
+                <TouchableOpacity style={CustomerStyles.cartPosition} onPress={() => nav.navigate('CartScreen', {'cartId': cart.id})}>
+                    <CartIcon itemNumbers={cartItemNumbers} />
+                </TouchableOpacity>
+            }
 
-            <FlatList 
+
+            <FlatList
                 ListHeaderComponent={MainCategory}
                 data={restaurants}
                 onEndReached={loadMore}
                 keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item }) => (
-                    <TouchableOpacity style={CustomerStyles.flatListNearRestaurant}>
-                        <Image
-                            source={{ uri: item.image }}
-                            style={CustomerStyles.flatListNearRestaurantImage}
-                        />
-                        <View style={{ marginLeft: 10, flex: 1 }}>
-                            <Text style={{ fontWeight: "bold", fontSize: 18 }}>{item.name}</Text>
-                            <Text>{item.address}</Text>
-                            <Text style={{ marginTop: 5 }}>⭐ {item.star_rate}</Text>
-                        </View>
-                    </TouchableOpacity>
-                )}
+                renderItem={({ item }) =>
+
+                    <RestaurantItem item={item} routeName="RestaurantScreen" params={{ "RestaurantId": item.id }} />
+                }
                 refreshing={loading}
                 onRefresh={loadRestaurants}
+
             />
+
+
+
 
         </View>
 
 
     )
 }
+
+
 export default HomeScreen;

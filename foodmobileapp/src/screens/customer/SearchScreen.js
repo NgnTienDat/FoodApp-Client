@@ -22,14 +22,7 @@ const SearchScreen = () => {
 
 
     // const {searchKeyWord, filters, setFilters} = useContext(SearchContext)
-    const priceRanges = [
-        'Dưới 20.000đ',
-        '20.000 - 50.000đ',
-        '50.000 - 100.000đ',
-        '100.000 - 200.000đ',
-        'Trên 200.000đ'
-    ];
-
+    
     const priceRanges2 = [
         { name: 'Dưới 20.000đ', min_price: 0, max_price: 20000 },
         { name: '20.000 - 50.000đ', min_price: 20000, max_price: 50000 },
@@ -64,7 +57,7 @@ const SearchScreen = () => {
         try {
             setLoading(true)
             console.info("here2");
-            const categoryQuery = selectedCategories.map(cat => `main_categories=${encodeURIComponent(cat)}`).join('&')
+            const categoryQuery = selectedCategories.map(cat => `main_category=${encodeURIComponent(cat)}`).join('&')
 
             let url = `${endpoints['search-food']}?min_price=${min_price}&max_price=${max_price}&${categoryQuery}`
             console.info("URL", url);

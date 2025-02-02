@@ -7,6 +7,7 @@ import MyUserReducer from './src/config/UserReducers';
 
 
 import 'react-native-gesture-handler';
+import CartProvider from './src/config/CartContext';
 
 
 export const UserProvider = ({ children }) => {
@@ -25,14 +26,18 @@ export const UserProvider = ({ children }) => {
 export default function App() {
   return (
     <UserProvider>
-      <SearchProvider>
-        <NavigationContainer>
-          <RootNavigator />
-        </NavigationContainer>
-      </SearchProvider>
+      <CartProvider>
+        <SearchProvider>
+          <NavigationContainer>
+            <RootNavigator />
+          </NavigationContainer>
+        </SearchProvider>
+      </CartProvider>
     </UserProvider>
   );
 }
+
+
 // export default function App() {
 //   const [user, dispatch] = useReducer(MyUserReducer, null)
   

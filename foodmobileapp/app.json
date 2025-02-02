@@ -12,14 +12,42 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "plugins": [
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location.",
+          "locationAlwaysPermission": "Allow $(PRODUCT_NAME) to use your location.",
+          "locationWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location.",
+          "isAndroidBackgroundLocationEnabled": true
+        }
+      ]
+    ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Ứng dụng cần truy cập vị trí để hiển thị vị trí hiện tại trên bản đồ."
+      },
+      "config": {
+        "googleMapsApiKey": "AlzaSyVAMUgPYQZuhs-e59WyqvXT3vI6fHbHJ8Q"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.yourcompany.foodmobileapp",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AlzaSyVAMUgPYQZuhs-e59WyqvXT3vI6fHbHJ8Q"
+        }
+      },
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_BACKGROUND_LOCATION"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"

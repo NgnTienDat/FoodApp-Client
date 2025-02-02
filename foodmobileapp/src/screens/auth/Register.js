@@ -1,5 +1,5 @@
-import { ActivityIndicator, Alert, Button, Image, Text, TouchableOpacity, View } from "react-native"
-import { TextInput } from "react-native-paper"
+import { ActivityIndicator, Alert, Button, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { HelperText, TextInput } from "react-native-paper"
 import CustomerStyles from "../../styles/CustomerStyles"
 import { useNavigation } from "@react-navigation/native"
 import { useContext, useState } from "react"
@@ -94,19 +94,19 @@ const RegisterScreen = () => {
 
             console.info(form);
 
-            // if (avatar) {
-            //     formData.append("avatar", {
-            //         uri: avatar.uri,
-            //         name: avatar.uri.split("/").pop(),
-            //         type: "image/jpeg", // Hoặc image/png tùy theo ảnh
-            //     });
-            // }
+            if (avatar) {
+                form.append("avatar", {
+                    uri: avatar.uri,
+                    name: avatar.uri.split("/").pop(),
+                    type: "image/jpeg", // Hoặc image/png tùy theo ảnh
+                });
+            }
 
-            // form.append('avatar', {
-            //     uri: avatar.uri,
-            //     name: avatar.uri.split("/").pop(),
-            //     type: "image/jpeg"
-            // });
+            form.append('avatar', {
+                uri: avatar.uri,
+                name: avatar.uri.split("/").pop(),
+                type: "image/jpeg"
+            });
 
 
             const res = await APIs.post(endpoints['register'], form, {
@@ -131,6 +131,20 @@ const RegisterScreen = () => {
         } finally {
             setLoading(false)
         }
+    }
+
+    const hasError = (field) => {
+        if (!user[field]) return "Trường này không được để trống!";
+
+        if (field === "email" && !/\S+@\S+\.\S+/.test(user.email)) return "Email không hợp lệ!";
+
+        if (field === "phone_number" && !/^\d{10,11}$/.test(user.phone_number)) return "Số điện thoại không hợp lệ!";
+
+        if (field === "password" && user.password.length < 3) return "Mật khẩu phải có ít nhất 3 ký tự!";
+
+        if (field === "confirm_password" && user.confirm_password !== user.password) return "Mật khẩu không khớp!";
+
+        return null;
     }
 
     // const register = async () => {
@@ -187,23 +201,34 @@ const RegisterScreen = () => {
     return (
         <View style={RegisterStyles.container}>
 
-            {Object.values(users).map(u => <TextInput
-                key={u.field}
-                secureTextEntry={u.secure}
-                mode="outlined"
-                style={RegisterStyles.RegisterInput}
-                placeholder={u.title}
-                value={user[u.field]}
-                onChangeText={t => updateUser(t, u.field)} />)}
+            {Object.values(users).map(u =>
+                <View key={u.field} style={{width: '100%'}}>
 
-            {/* <TouchableOpacity onPress={pickImage} style={RegisterStyles.ChooseImageButton}>
-                <Text style={RegisterStyles.ChooseImageText}>
-                    Chọn ảnh đại diện
-                </Text>
-            </TouchableOpacity>
+                    <TextInput
+                        label={u.title}
+                        secureTextEntry={u.secure}
+                        mode="outlined"
+                        style={RegisterStyles.RegisterInput}
+                        placeholder={u.title}
+                        value={user[u.field]}
+                        onChangeText={t => updateUser(t, u.field)} />
+                    <HelperText type="error" visible={!!hasError(u.field)}>
+                        {hasError(u.field)}
+                    </HelperText>
+                </View>
+            )
+            }
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
 
-            {avatar ? <Image source={{ uri: avatar.uri }}
-                style={{ width: 100, height: 100, marginBottom:10 }} /> : ""} */}
+                <TouchableOpacity onPress={pickImage} style={RegisterStyles.ChooseImageButton}>
+                    <Text style={RegisterStyles.ChooseImageText}>{avatar ? 'Đổi ảnh đại diện' : 'Chọn ảnh đại diện'}</Text>
+                </TouchableOpacity>
+
+                {avatar && (
+                    <Image source={{ uri: avatar.uri }} style={RegisterStyles.AvatarPreview} />
+                )}
+            </View>
+
 
             <TouchableOpacity onPress={register} loading={loading} style={RegisterStyles.RegisterButton}>
                 {loading && <ActivityIndicator style={{ marginRight: 10 }} color="#fff" />}
@@ -216,5 +241,7 @@ const RegisterScreen = () => {
     )
 }
 export default RegisterScreen
+const styles = StyleSheet.create({
 
+})
 

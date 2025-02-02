@@ -126,7 +126,7 @@ const OrderDetail = ({ navigation, route }) => {
                         {order.order_details ? (
                             order.order_details.map((item, index) => (
                                 <View key={`item-${index}`}>
-                                    <Text style={RestaurantStyles.itemText}>Tên món: {item.food_name}</Text>
+                                    <Text style={RestaurantStyles.itemText}>Tên món: {item.food.name}</Text>
                                     <Text style={RestaurantStyles.infoText}>Giá tiền: {new Intl.NumberFormat('vi-VN').format(item.sub_total)} đ</Text>
                                     <Text style={RestaurantStyles.infoText}>Số lượng: {item.quantity}</Text>
                                 </View>
@@ -144,9 +144,9 @@ const OrderDetail = ({ navigation, route }) => {
                     </View>
                     <View>
                         <Text style={{ fontSize: 17, marginBottom: 5 }}>Hình thức thanh toán: Tiền mặt</Text>
-                        <Text style={RestaurantStyles.itemText}>Tiền hàng: {new Intl.NumberFormat('vi-VN').format(order.total)} đ</Text>
+                        <Text style={RestaurantStyles.itemText}>Tiền hàng: {new Intl.NumberFormat('vi-VN').format(order.total - order.shipping_fee)} đ</Text>
                         <Text style={RestaurantStyles.itemText}>Phí vận chuyển: {new Intl.NumberFormat('vi-VN').format(order.shipping_fee)} đ</Text>
-                        <Text style={RestaurantStyles.itemText}>Tổng thanh toán: {new Intl.NumberFormat('vi-VN').format(order.shipping_fee + order.total)} đ</Text>
+                        <Text style={RestaurantStyles.itemText}>Tổng thanh toán: {new Intl.NumberFormat('vi-VN').format(order.total)} đ</Text>
                     </View>
 
 

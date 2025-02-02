@@ -3,13 +3,16 @@ import { View, Text, Alert } from "react-native";
 import { TextInput, Button } from 'react-native-paper';
 import RestaurantStyles from "../../../styles/RestaurantStyles";
 import RestaurantAPIs, { endpoints } from "../../../config/RestaurantAPIs";
+import { useContext } from "react";
+import { MyUserContext } from "../../../config/UserContexts";
 
 
 const AddCategory = ({ route, navigation }) => {
     const [category, setCategory] = useState("")
     const { onGoBack } = route.params || {};
     const [loading, setLoading] = useState(false);
-    const restaurantId = 1
+    const user = useContext(MyUserContext)
+    const restaurantId = user.restaurant_id
 
     const addCategory = async () => {
         setLoading(true);

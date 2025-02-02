@@ -3,17 +3,21 @@ import { View, Text, ScrollView, Modal, TouchableOpacity, Alert, FlatList } from
 import RestaurantAPIs, { endpoints } from "../../../config/RestaurantAPIs";
 import { useFocusEffect } from '@react-navigation/native';
 import RestaurantStyles from "../../../styles/RestaurantStyles";
+import { useContext } from "react";
+import { MyUserContext } from "../../../config/UserContexts";
 
 
 const OrderConfirmed = ({ navigation }) => {
     const [loading, setLoading] = useState(false);
     const [orders, setOrders] = useState([]);
+    const user = useContext(MyUserContext)
+    const restaurantId = user.restaurant_id
 
 
     const loadOrder = async () => {
         setLoading(true);
         try {
-            let res = await RestaurantAPIs.get(endpoints['getOrder']);
+            let res = await RestaurantAPIs.get(endpoints['getRestaurantOrder'](restaurantId));
             // console.info(res.data);
             const filterOrders = res.data.filter(o => o.delivery_status === "Đã xác nhận")
             setOrders(filterOrders);
@@ -109,23 +113,6 @@ const OrderConfirmed = ({ navigation }) => {
                                     <Text style={RestaurantStyles.infoText}>Số món: {item.order_details.length}</Text>
                                     <Text style={RestaurantStyles.infoText}>Địa chỉ: {item.shipping_address ? item.shipping_address : 'ABC, 123, Quận 1, HCM'}</Text>
                                 </View>
-
-                                {/* <View style={{ flexDirection: 'row' }}>
-                                    <Button
-                                        mode="contained"
-                                        style={[RestaurantStyles.receiveOrderBtn, { backgroundColor: '#ccc' }]}
-                                        onPress={() => cancelOrder(item.id)}
-                                    >
-                                        Hủy đơn
-                                    </Button>
-                                    <Button
-                                        mode="contained"
-                                        style={RestaurantStyles.receiveOrderBtn}
-                                        onPress={() => confirmOrder(item.id)}
-                                    >
-                                        Giao hàng
-                                    </Button>
-                                </View> */}
                             </View>
                         </TouchableOpacity>
                     )}

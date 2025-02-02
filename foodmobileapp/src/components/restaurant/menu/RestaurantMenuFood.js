@@ -4,9 +4,12 @@ import { Searchbar, Button } from "react-native-paper";
 import RestaurantStyles from "../../../styles/RestaurantStyles";
 import RestaurantAPIs, { endpoints } from "../../../config/RestaurantAPIs";
 import CustomerStyles from '../../../styles/CustomerStyles';
+import { useContext } from "react";
+import { MyUserContext } from "../../../config/UserContexts";
 
 const RestaurantMenuFood = ({ navigation }) => {
-    const restaurantId = 1
+    const user = useContext(MyUserContext)
+    const restaurantId = user.restaurant_id
     const [menus, setMenus] = useState([]);
     const [loading, setLoading] = useState(false)
     const [q, setQ] = useState("");

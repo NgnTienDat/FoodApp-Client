@@ -4,12 +4,15 @@ import { Searchbar, Button } from "react-native-paper";
 import { useEffect, useState, useCallback } from "react";
 import RestaurantAPIs, { endpoints } from "../../../config/RestaurantAPIs";
 import CustomerStyles from '../../../styles/CustomerStyles';
+import { useContext } from "react";
+import { MyUserContext } from "../../../config/UserContexts";
 
 
 const RestaurantCategoryFood = ({ navigation }) => {
     const [loading, setLoading] = useState(false)
     const [restaurantCategories, setRestaurantCategories] = useState([]);
-    const restaurantId = 1
+    const user = useContext(MyUserContext)
+    const restaurantId = user.restaurant_id
     const [page, setPage] = useState(1);
     const [q, setQ] = useState("");
 

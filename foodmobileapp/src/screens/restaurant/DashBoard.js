@@ -4,12 +4,15 @@ import RestaurantStyles from "../../styles/RestaurantStyles";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Icon } from 'react-native-paper';
 import RestaurantAPIs, { endpoints } from "../../config/RestaurantAPIs";
+import { useContext } from "react";
+import { MyDispatchContext, MyUserContext } from "../../config/UserContexts";
 
 const DashBoard = ({ navigation }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [restaurant, setRestaurant] = useState([]);
-    const restaurantId = 1
+    const user = useContext(MyUserContext)
+    const restaurantId = user.restaurant_id
     const [page, setPage] = useState(1);
     const [foods, setFoods] = useState([]);
 
@@ -42,6 +45,21 @@ const DashBoard = ({ navigation }) => {
                 }
             }
 
+        } catch (ex) {
+            console.error('aaaaa' + ex);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    const statusRestaurant = async () => {
+        setLoading(true);
+        try {
+            let res = await RestaurantAPIs.post(endpoints['statusRestaurant'](restaurantId))
+            setRestaurant((prevState) => ({
+                ...prevState,
+                active: res.data.active,
+            }));
         } catch (ex) {
             console.error('aaaaa' + ex);
         } finally {
@@ -83,8 +101,8 @@ const DashBoard = ({ navigation }) => {
 
             {/* close-open store */}
             <View style={RestaurantStyles.switchContainer}>
-                <Text style={RestaurantStyles.switchLabel}>Mở cửa</Text>
-                <Switch value={isOpen} onValueChange={setIsOpen} />
+                <Text style={RestaurantStyles.switchLabel}>{restaurant.active ? 'Mở cửa' : 'Đóng cửa'}</Text>
+                <Switch value={restaurant.active} onValueChange={statusRestaurant} />
             </View>
 
             {/* control */}
@@ -94,18 +112,13 @@ const DashBoard = ({ navigation }) => {
                     <Icon source="silverware" size={30} />
                     <Text style={RestaurantStyles.iconText}>Món ăn</Text>
                 </TouchableOpacity>
-                {/* <TouchableOpacity style={RestaurantStyles.menuItem}
-                    onPress={() => navigation.navigate('active_time')}>
-                    <Icon source="clock-time-eight-outline" size={30} />
-                    <Text style={RestaurantStyles.iconText}>Menu</Text>
-                </TouchableOpacity> */}
                 <TouchableOpacity style={RestaurantStyles.menuItem}
                     onPress={() => navigation.navigate('report')}>
                     <Icon source="poll" size={30} />
                     <Text style={RestaurantStyles.iconText}>Báo cáo</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={RestaurantStyles.menuItem}
-                    onPress={() => navigation.navigate('order')}>
+                    onPress={() => navigation.navigate('index_order')}>
                     <Icon source="food-outline" size={30} />
                     <Text style={RestaurantStyles.iconText}>Đơn hàng</Text>
                 </TouchableOpacity>
@@ -114,23 +127,25 @@ const DashBoard = ({ navigation }) => {
                 {loading && <ActivityIndicator />}
             </View>
             {/* mon an */}
-            <Text style={RestaurantStyles.sectionTitle}>Món của bạn</Text>
+            <Text style={RestaurantStyles.sectionTitle}>Món ăn và đánh giá khách hàng</Text>
             <FlatList
                 refreshControl={<RefreshControl refreshing={loading} onRefresh={refresh} />}
                 onEndReached={loadMore}
                 data={foods}
                 keyExtractor={(item, index) => `${item.id}-${index}`}
                 renderItem={({ item }) => (
-                    <TouchableOpacity style={[RestaurantStyles.dishCard,
-                    !item.is_available && { backgroundColor: '#ccc' }
-                    ]} key={`${item.id}-${Math.random()}`}>
+                    <TouchableOpacity
+                        style={[RestaurantStyles.dishCard]}
+                        key={`${item.id}-${Math.random()}`}
+                        onPress={() => navigation.navigate('food_review', {
+                            foodId: item.id
+                        })}
+                    >
                         <Image source={{ uri: item.image }} style={RestaurantStyles.dishImage} />
                         <View style={{ flexDirection: 'column', justifyContent: 'space-between', paddingLeft: 10 }}>
                             <Text style={RestaurantStyles.dishName}>{item.name}</Text>
-                            <Text>Thành tiền: {item.price} VNĐ</Text>
+                            <Text>Thành tiền: {new Intl.NumberFormat('vi-VN').format(item.price)} VNĐ</Text>
                             <Text>{item.description}</Text>
-                            <Text>Trạng thái: {item.is_available ? 'Còn món' : 'Hết món'}</Text>
-
                         </View>
                     </TouchableOpacity>
                 )}

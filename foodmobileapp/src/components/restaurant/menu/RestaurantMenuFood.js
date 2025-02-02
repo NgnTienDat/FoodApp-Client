@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import { View, Text, FlatList, RefreshControl, Switch, TouchableOpacity, Image, ActivityIndicator } from "react-native";
 import { Searchbar, Button } from "react-native-paper";
-import RestaurantStyles from "../../styles/RestaurantStyles";
-import RestaurantAPIs, { endpoints } from "../../config/RestaurantAPIs";
-import CustomerStyles from '../../styles/CustomerStyles';
+import RestaurantStyles from "../../../styles/RestaurantStyles";
+import RestaurantAPIs, { endpoints } from "../../../config/RestaurantAPIs";
+import CustomerStyles from '../../../styles/CustomerStyles';
+import { useContext } from "react";
+import { MyUserContext } from "../../../config/UserContexts";
 
 const RestaurantMenuFood = ({ navigation }) => {
-    const restaurantId = 1
+    const user = useContext(MyUserContext)
+    const restaurantId = user.restaurant_id
     const [menus, setMenus] = useState([]);
     const [loading, setLoading] = useState(false)
     const [q, setQ] = useState("");
@@ -35,7 +38,7 @@ const RestaurantMenuFood = ({ navigation }) => {
         return () => clearTimeout(timer);
     }, [restaurantId, q]);
     const refresh = () => {
-        loadFoods();
+        loadMenus();
     }
     const search = (value, callback) => {
         callback(value);
@@ -58,10 +61,12 @@ const RestaurantMenuFood = ({ navigation }) => {
                 renderItem={({ item }) => (
                     <TouchableOpacity style={[RestaurantStyles.dishCard]}
                         key={`${item.id}-${Math.random()}`}
-                    // onPress={() => navigation.navigate('detail_food', {
-                    //     foodId: item.id,
-                    //     onGoBack: () => refresh(),
-                    // })}
+                        onPress={() => navigation.navigate('detail_menu',
+                            {
+                                menuId: item.id,
+                                onGoBack: () => refresh(),
+                            }
+                        )}
                     >
                         <View style={{ flexDirection: 'column', justifyContent: 'space-between', paddingLeft: 10 }}>
                             <Text style={RestaurantStyles.dishName}>{item.name}</Text>
@@ -76,11 +81,13 @@ const RestaurantMenuFood = ({ navigation }) => {
 
             <View >
                 <Button icon="plus" mode="contained" style={[RestaurantStyles.addBtn]}
-                // onPress={() => navigation.navigate('add_food', {
-                //     onGoBack: () => refresh(), // Gọi lại khi quay về
-                // })}
+                    onPress={() => navigation.navigate('add_menu'
+                        , {
+                            onGoBack: () => refresh(), // Gọi lại khi quay về
+                        }
+                    )}
                 >
-                    Thêm món ăn mới
+                    Thêm menu
                 </Button>
             </View>
         </View>

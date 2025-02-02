@@ -61,8 +61,6 @@ const AccountStackNavigator = () => {
     )
 }
 
-
-
 const FollowStackNavigator = () => {
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>

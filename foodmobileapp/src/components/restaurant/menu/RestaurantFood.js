@@ -1,13 +1,16 @@
 import { View, Text, FlatList, RefreshControl, Switch, TouchableOpacity, Image, ActivityIndicator } from "react-native";
 import { Searchbar, Button } from "react-native-paper";
-import RestaurantStyles from "../../styles/RestaurantStyles";
-import CustomerStyles from '../../styles/CustomerStyles';
+import RestaurantStyles from "../../../styles/RestaurantStyles";
+import CustomerStyles from '../../../styles/CustomerStyles';
 import { useState, useEffect } from "react";
-import RestaurantAPIs, { endpoints } from "../../config/RestaurantAPIs";
+import RestaurantAPIs, { endpoints } from "../../../config/RestaurantAPIs";
+import { useContext } from "react";
+import { MyUserContext } from "../../../config/UserContexts";
 
 const RestaurantFood = ({ navigation }) => {
     const [loading, setLoading] = useState(false)
-    const restaurantId = 1
+    const user = useContext(MyUserContext)
+    const restaurantId = user.restaurant_id
     const [page, setPage] = useState(1);
     const [foods, setFoods] = useState([]);
     const [q, setQ] = useState("");
@@ -105,7 +108,7 @@ const RestaurantFood = ({ navigation }) => {
                         <Image source={{ uri: item.image }} style={[RestaurantStyles.dishImage]} />
                         <View style={{ flexDirection: 'column', justifyContent: 'space-between', paddingLeft: 10 }}>
                             <Text style={RestaurantStyles.dishName}>{item.name}</Text>
-                            <Text>Thành tiền: {item.price} VNĐ</Text>
+                            <Text>Thành tiền: {new Intl.NumberFormat('vi-VN').format(item.price)} VNĐ</Text>
                             <Text>{item.description}</Text>
                             <Text>Trạng thái: {item.is_available ? 'Còn món' : 'Hết món'}</Text>
 

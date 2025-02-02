@@ -1,15 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, ScrollView, Image, Alert } from "react-native";
+import { View, Text, ScrollView, Switch, Image, Alert } from "react-native";
 import { TextInput, Button } from 'react-native-paper';
-import RestaurantStyles from "../../styles/RestaurantStyles";
+import RestaurantStyles from "../../../styles/RestaurantStyles";
 import DropDownPicker from 'react-native-dropdown-picker';
 import * as ImagePicker from 'expo-image-picker';
-import RestaurantAPIs, { endpoints } from "../../config/RestaurantAPIs";
+import RestaurantAPIs, { endpoints } from "../../../config/RestaurantAPIs";
+import { useContext } from "react";
+import { MyUserContext } from "../../../config/UserContexts";
 
 
-const AddFood = ({ route, navigation }) => {
-    const restaurantId = 1
-    const { onGoBack } = route.params || {};
+
+const DetailFood = ({ navigation, route }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const { foodId, onGoBack } = route.params || {};
+    const user = useContext(MyUserContext)
+    const restaurantId = user.restaurant_id
     const [loading, setLoading] = useState(false);
     const [food, setFood] = useState({
         "name": "",
@@ -25,21 +30,18 @@ const AddFood = ({ route, navigation }) => {
         "name": {
             "title": "Tên món ăn",
             "field": "name",
-            "secure": false,
             "icon": "text",
             "keyboardType": "default"
         },
         "price": {
             "title": "Giá tiền",
             "field": "price",
-            "secure": false,
             "icon": "text",
             "keyboardType": "numeric"
         },
         "description": {
             "title": "Mô tả món ăn",
             "field": "description",
-            "secure": false,
             "icon": "text",
             "keyboardType": "default"
         }
@@ -77,7 +79,6 @@ const AddFood = ({ route, navigation }) => {
             let url = `${endpoints['restaurantCategories'](restaurantId)}`
 
             let res = await RestaurantAPIs.get(url);
-
             let dictionaryCategories = res.data.results.map(c => ({
                 label: c.name,
                 value: c.id
@@ -92,17 +93,51 @@ const AddFood = ({ route, navigation }) => {
         }
     }
 
-    const addFood = async () => {
+    const [isAvailable, setIsAvailable] = useState(false);
+    const toggleAvailability = () => {
+        setIsAvailable((prev) => !prev);
+    };
+
+    const loadFood = async () => {
+        setLoading(true)
+        try {
+            let url = `${endpoints['detailFood'](foodId)}`
+            let res = await RestaurantAPIs.get(url)
+            console.log(res.data.is_available)
+
+
+            setFood({
+                name: res.data.name || "",
+                price: res.data.price?.toString() || "",
+                description: res.data.description || "",
+            });
+
+
+            setValue(res.data.category);
+            setTimeValue(res.data.serve_period);
+            setImage({ uri: res.data.image });
+            setIsAvailable(res.data.is_available);
+            console.info(res.data.serve_period)
+        }
+        catch (ex) {
+            console.error('lỗi' + ex);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+
+    const update = async () => {
         setLoading(true);
         try {
+            // tổ chức cập nhật
             const form = new FormData();
-
             for (let f in food)
                 if (f !== 'confirm')
                     form.append(f, food[f]);
             form.append('category', value);
-            form.append('serve_period', valueTime || 'Cả ngày');
-            form.append('is_available', true);
+            form.append('serve_period', valueTime);
+            form.append('is_available', isAvailable);
             if (image) {
                 form.append('image', {
                     uri: image.uri,
@@ -113,15 +148,14 @@ const AddFood = ({ route, navigation }) => {
             else {
                 form.append('image', 'Have not uploaded photos yet');
             }
-
             console.info("Serve period gửi lên::", valueTime);
             console.info("Form data:", Array.from(form.entries()));
-            const response = await RestaurantAPIs.post(`${endpoints['createFood'](restaurantId)}`, form, {
+            const response = await RestaurantAPIs.patch(`${endpoints['detailFood'](foodId)}`, form, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             });
-            if (response.status === 201) {
+            if (response.status === 200) {
                 console.log(response.data);
                 setFood({
                     "name": "",
@@ -129,38 +163,79 @@ const AddFood = ({ route, navigation }) => {
                     "description": ""
                 });
                 setImage('');
-                Alert.alert('Thành công', 'Món ăn mới đã được thêm!');
-                // Gọi callback khi quay về
+                Alert.alert('Thành công', 'Món ăn mới đã được cập nhật!');
                 if (onGoBack) onGoBack();
                 navigation.goBack();
+                // Alert.alert(
+                //     "Thành công",
+                //     "Đơn hàng đã được xác nhận giao hàng!",
+                //     [{ text: "OK", onPress: () => navigation.goBack() }]
+                // );
             }
 
-        }
-        catch (ex) {
+        } catch (ex) {
             if (ex.response) {
                 console.error('Server trả về lỗi:', ex.response.data);
-                Alert.alert('Lỗi', ex.response.data.message || 'Không thể thêm món ăn.');
+                Alert.alert('Lỗi', ex.response.data.message || 'Không thể cập nhật món ăn.');
             } else {
                 console.error('Lỗi không xác định:', ex.message);
-                Alert.alert('Lỗi', 'Không thể thêm món ăn. Vui lòng thử lại.');
+                Alert.alert('Lỗi', 'Không thể cập nhật món ăn. Vui lòng thử lại.');
             }
+
         } finally {
             setLoading(false);
         }
     }
 
+    const deleteFood = async () => {
+        setLoading(true);
+        try {
+            let url = `${endpoints['detailFood'](foodId)}`
+            let response = await RestaurantAPIs.delete(url)
+            if (response.status === 204) {
+                console.log(response.data);
+                setFood({
+                    "name": "",
+                    "price": "",
+                    "description": ""
+                });
+                setImage('');
+                Alert.alert('Thành công', 'Món ăn đã được xóa!');
+                if (onGoBack) onGoBack();
+                navigation.goBack();
+            }
+        } catch (ex) {
+            if (ex.response) {
+                console.error('Server trả về lỗi:', ex.response.data);
+                Alert.alert('Lỗi', ex.response.data.message || 'Không thể xóa món ăn.');
+            } else {
+                console.error('Lỗi không xác định:', ex.message);
+                Alert.alert('Lỗi', 'Không thể xóa món ăn. Vui lòng thử lại.');
+
+            }
+
+        } finally {
+            setLoading(false);
+        }
+    }
+
+
+
+
     useEffect(() => {
         loadCategories();
+        loadFood();
     }, [restaurantId]);
 
     return (
+
 
         <View style={{ flex: 1 }}>
             <ScrollView nestedScrollEnabled={true}>
                 <>
                     {Object.values(foods).map(f =>
                         <View key={f.field}>
-                            <Text style={{ marginTop: 5, fontSize: 17, fontWeight: 'bold' }}> {f.title}: </Text>
+                            <Text style={{ marginTop: 5, fontSize: 17, fontWeight: 'bold' }}> {f.title}:</Text>
                             <TextInput style={RestaurantStyles.inputMargin}
                                 mode="outlined"
                                 value={food[f.field]}
@@ -171,6 +246,13 @@ const AddFood = ({ route, navigation }) => {
                     )}
 
                 </>
+
+                <View style={RestaurantStyles.switchContainerCustom}>
+                    <Text style={{ fontSize: 17, fontWeight: 'bold' }}>Còn món: </Text>
+                    <Switch
+                        value={isAvailable}
+                        onValueChange={toggleAvailability} />
+                </View>
                 <View style={RestaurantStyles.dropDownStyle}>
                     <Text style={{ marginTop: 5, fontSize: 17, fontWeight: 'bold' }}> Hình ảnh: </Text>
                     <Button mode="outlined" onPress={pickImage}>
@@ -204,16 +286,19 @@ const AddFood = ({ route, navigation }) => {
                         placeholder="Chọn thời điểm bán"
                     />
                 </View>
-                <Button icon="plus" mode="contained" style={[RestaurantStyles.addBtn]}
-                    onPress={addFood}
-                    loading={loading}
-                    disabled={loading}>
-                    Thêm
-                </Button>
+                <View style={[RestaurantStyles.groupBtn]}>
+                    <Button icon="content-save-outline" mode="contained" style={[RestaurantStyles.addBtn]} onPress={update}>
+                        Lưu thay đổi
+                    </Button>
+                    <Button icon="delete-outline" mode="contained" style={[RestaurantStyles.deleteBtn]} onPress={deleteFood}>
+                        Xóa món ăn
+                    </Button>
+                </View>
             </ScrollView>
+
 
 
         </View>
     );
 };
-export default AddFood
+export default DetailFood

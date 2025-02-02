@@ -49,8 +49,8 @@ const LoginScreen = () => {
 
             //TRUNG LOGIN - Không dùng thì comment lại
             const loginData = QueryString.stringify({
-                'client_id': 'tBZYBXHl1QfqB5po2PMgN0AEKaP6scK8PYftPtAQ',
-                'client_secret': 'CGU3AkafQg2nQ5YXwnokMhvojZmpeh9mpaQAanPnx8IqX8bXG5HCl2ug3kqbkB4VFhPbJQ3f4co5yYUJNn8APa0P0JHzuuvtuoHwmIcbNJdskyFheVJo5J6tryac6r8q',
+                'client_id': 'IAxWoaNARM6sxC95v3VrfNa8w6MzWc6LLWrA7rZf',
+                'client_secret': 'LZtLFRzPH1oGFW9eDaY77Bcol7RPy1T5h5BWxoIR1puFi2vpyvOZngulwnhSmclSYWLdBFQ0pAQNWzgfwK9C7LpMwiNtPtfM3HOQ7rbaWGVhTNI4RYbGbgJZmiLkHx2F',
                 'grant_type': 'password',
                 ...user
             })

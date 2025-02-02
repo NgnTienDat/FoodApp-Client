@@ -1,4 +1,4 @@
-import { ActivityIndicator, Text, TouchableOpacity, View, Image, Keyboard, Alert } from "react-native"
+import { ActivityIndicator, Text, TouchableOpacity, View, Image, Keyboard, Alert, FlatList } from "react-native"
 import { TextInput, Button } from "react-native-paper"
 import CustomerStyles from "../../styles/CustomerStyles"
 import { ScrollView } from "react-native"
@@ -6,6 +6,7 @@ import { useContext, useState } from "react"
 import * as ImagePicker from 'expo-image-picker';
 import RestaurantStyles from "../../styles/RestaurantStyles"
 import RestaurantAPIs, { endpoints } from "../../config/RestaurantAPIs"
+import axios from "axios";
 
 const RestaurantRegisterScreen = () => {
     const [loading, setLoading] = useState(false)
@@ -53,7 +54,6 @@ const RestaurantRegisterScreen = () => {
     // thông tin nha hang
     const [resInfo, setResInfo] = useState({
         "name": "",
-        "address": "",
         "phone_number": "",
     })
     const restaurant_info = {
@@ -64,13 +64,13 @@ const RestaurantRegisterScreen = () => {
             "icon": "text",
             "keyboardType": "default"
         },
-        "address": {
-            "title": "Địa chỉ nhà hàng",
-            "field": "address",
-            "secure": false,
-            "icon": "text",
-            "keyboardType": "default"
-        },
+        // "address": {
+        //     "title": "Địa chỉ nhà hàng",
+        //     "field": "address",
+        //     "secure": false,
+        //     "icon": "text",
+        //     "keyboardType": "default"
+        // },
         "phone_number": {
             "title": "Số điện thoại",
             "field": "phone_number",
@@ -194,6 +194,48 @@ const RestaurantRegisterScreen = () => {
         }
     }
 
+    const [query, setQuery] = useState('');
+    const [addressRes, setAddressRes] = useState({
+        address: "",
+        latitude: "",
+        longitude: "",
+    });
+
+
+    const fetchAddress = async (address) => {
+        try {
+            const res = await axios.get(`https://maps.gomaps.pro/maps/api/geocode/json?key=AlzaSyQEakGpZpSpxMQGLE1emuT9M6bsbwOboWH`, {
+                params: { address: address },
+            });
+            if (res.data.status === 'OK') {
+                console.log(res.data.results)
+
+                const formatted_address = res.data.results[0].formatted_address;
+                const location = res.data.results[0].geometry.location;
+
+                console.log(formatted_address);
+                console.log(location.lat);
+
+                setAddressRes({
+                    address: formatted_address,
+                    latitude: location.lat,
+                    longitude: location.lng,
+                });
+            }
+            else {
+                Alert.alert('Lỗi', 'Địa chỉ không hợp lệ, vui lòng kiểm tra lại.');
+                setAddressRes({
+                    address: "",
+                    latitude: "",
+                    longitude: "",
+                });
+            }
+        }
+        catch (error) {
+            console.error('Error fetching address details:', error);
+        }
+    };
+
 
     const registerRestaurant = async () => {
         if (!validate()) {
@@ -210,7 +252,12 @@ const RestaurantRegisterScreen = () => {
                     form.append(r, resInfo[r]);
             form.append('active', false);
 
-            form.append('owner', newUserId);
+            form.append('owner', Number(newUserId));
+
+            await fetchAddress(query);
+            form.append('address', addressRes.address);
+            form.append('latitude', addressRes.latitude);
+            form.append('longitude', addressRes.longitude);
 
             if (imageRes) {
                 form.append('image', {
@@ -256,9 +303,13 @@ const RestaurantRegisterScreen = () => {
         }
     }
 
+
+
+
+
     return (
         <View style={{ flex: 1 }}>
-            <ScrollView>
+            <ScrollView >
                 <View style={{ margin: 10, }}>
                     <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Thông tin người dùng</Text>
                 </View>
@@ -328,6 +379,17 @@ const RestaurantRegisterScreen = () => {
                                 mode="outlined" />
                         </View>
                     )}
+                    <View>
+                        <TextInput
+                            style={CustomerStyles.loginInput}
+                            mode="outlined"
+                            placeholder="Địa chỉ (số nhà, đường, quận/huyện, thành phố)"
+                            value={query}
+                            onChangeText={(text) => {
+                                setQuery(text);
+                            }}
+                        />
+                    </View>
                     <View >
                         {imageRes ? <Image source={{ uri: imageRes.uri }} style={{
                             width: 150,

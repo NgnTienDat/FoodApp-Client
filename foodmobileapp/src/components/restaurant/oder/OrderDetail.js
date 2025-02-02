@@ -126,7 +126,7 @@ const OrderDetail = ({ navigation, route }) => {
                         {order.order_details ? (
                             order.order_details.map((item, index) => (
                                 <View key={`item-${index}`}>
-                                    <Text style={RestaurantStyles.itemText}>Tên món: {item.food_name}</Text>
+                                    <Text style={RestaurantStyles.itemText}>Tên món: {item.food.name}</Text>
                                     <Text style={RestaurantStyles.infoText}>Giá tiền: {new Intl.NumberFormat('vi-VN').format(item.sub_total)} đ</Text>
                                     <Text style={RestaurantStyles.infoText}>Số lượng: {item.quantity}</Text>
                                 </View>

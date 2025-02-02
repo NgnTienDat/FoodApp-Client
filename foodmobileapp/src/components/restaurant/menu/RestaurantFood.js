@@ -108,7 +108,7 @@ const RestaurantFood = ({ navigation }) => {
                         <Image source={{ uri: item.image }} style={[RestaurantStyles.dishImage]} />
                         <View style={{ flexDirection: 'column', justifyContent: 'space-between', paddingLeft: 10 }}>
                             <Text style={RestaurantStyles.dishName}>{item.name}</Text>
-                            <Text>Thành tiền: {item.price} VNĐ</Text>
+                            <Text>Thành tiền: {new Intl.NumberFormat('vi-VN').format(item.price)} VNĐ</Text>
                             <Text>{item.description}</Text>
                             <Text>Trạng thái: {item.is_available ? 'Còn món' : 'Hết món'}</Text>
 

@@ -137,3 +137,33 @@ const RestaurantReport = ({ navigation }) => {
 };
 
 export default RestaurantReport;
+
+
+// const groupedData = [
+//     {
+//         title: "Ngày 01 Tháng 01 Năm 2025", // Tên nhóm
+//         data: [
+//             { food__name: "Phở bò", total_sale: 500000, total_order: 10 },
+//             { food__name: "Bánh mì", total_sale: 200000, total_order: 5 },
+//         ],
+//     },
+//     {
+//         title: "Ngày 02 Tháng 01 Năm 2025",
+//         data: [
+//             { food__name: "Cơm tấm", total_sale: 700000, total_order: 20 },
+//         ],
+//     },
+// ];
+
+
+// SectionList yêu cầu dữ liệu phải có cấu trúc như sau
+// const sections = [
+//     {
+//         title: "Nhóm 1",
+//         data: ["Mục 1", "Mục 2", "Mục 3"],
+//     },
+//     {
+//         title: "Nhóm 2",
+//         data: ["Mục 4", "Mục 5"],
+//     },
+// ];

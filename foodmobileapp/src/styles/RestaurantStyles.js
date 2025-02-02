@@ -45,11 +45,6 @@ export default StyleSheet.create({
         fontSize: 17,
         color: 'white',
     },
-    infoText: {
-        fontSize: 17,
-        color: 'white',
-        marginBottom: 10,
-    },
     incomeNumber: {
         fontSize: 17,
         textAlign: "center",
@@ -130,7 +125,7 @@ export default StyleSheet.create({
         backgroundColor: '#EE4D2D',
         borderRadius: 4,
         alignItems: 'center',
-        margin: 5
+        margin: 5,
     },
 
     // 
@@ -168,11 +163,7 @@ export default StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 5,
     },
-    infoText: {
-        fontSize: 14,
-        color: '#666',
-        marginBottom: 5,
-    }, rejectBtn: {
+    rejectBtn: {
         backgroundColor: 'red',
         paddingVertical: 10,
         paddingHorizontal: 30,

@@ -6,6 +6,9 @@ import { useFocusEffect } from '@react-navigation/native';
 import OrderList from "./OrderList";
 import { useContext } from "react";
 import { MyUserContext } from "../../../config/UserContexts";
+//
+import { ref, onChildAdded } from "firebase/database";
+import { database } from "../../../config/FirebaseConfig";
 
 const RestaurantOrder = () => {
     const [modalVisible, setModalVisible] = useState(false);
@@ -19,7 +22,7 @@ const RestaurantOrder = () => {
         setLoading(true);
         try {
             let res = await RestaurantAPIs.get(endpoints['getRestaurantOrder'](restaurantId));
-            // console.info(res.data);
+            console.info(res.data);
             const filterOrders = res.data.filter(o => o.delivery_status === "Chờ xác nhận")
             setOrders(filterOrders);
         } catch (ex) {
@@ -92,6 +95,18 @@ const RestaurantOrder = () => {
     }
 
 
+    useEffect(() => {
+        const ordersRef = ref(database, `orders`);
+        const unsubscribe = onChildAdded(ordersRef, (snapshot) => {
+            const newOrder = snapshot.val();
+            if (newOrder.restaurant === restaurantId) {
+                loadOrder();
+            }
+        });
+
+        return () => unsubscribe();
+    }, [restaurantId]);
+
     useFocusEffect(
         useCallback(() => {
             loadOrder();
@@ -129,7 +144,7 @@ const RestaurantOrder = () => {
                             <ScrollView style={{ height: 300 }}>
                                 {selectedOrder.order_details.map((item, index) => (
                                     <View key={`item-${index}`}>
-                                        <Text style={RestaurantStyles.itemText}>Tên món: {item.food_name}</Text>
+                                        <Text style={RestaurantStyles.itemText}>Tên món: {item.food.name}</Text>
                                         <Text style={RestaurantStyles.infoText}>Giá tiền: {new Intl.NumberFormat('vi-VN').format(item.sub_total)} đ</Text>
                                         <Text style={RestaurantStyles.infoText}>Số lượng: {item.quantity}</Text>
                                     </View>

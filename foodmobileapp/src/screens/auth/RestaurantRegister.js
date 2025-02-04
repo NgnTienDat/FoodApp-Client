@@ -118,6 +118,7 @@ const RestaurantRegisterScreen = () => {
     const validate = () => {
         Keyboard.dismiss();
         let valid = true;
+        let emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
         for (let u in userInfo) {
             if (!userInfo[u]) {
@@ -127,6 +128,10 @@ const RestaurantRegisterScreen = () => {
 
             if (u === "phone_number" && userInfo[u].length !== 10) {
                 handleError(`${user_info[u].title} phải có đúng 10 chữ số`, u);
+                valid = false;
+            }
+            if (u === "email" && !emailRegex.test(userInfo[u])) {
+                handleError(`${user_info[u].title} chưa đúng định dạng`, u);
                 valid = false;
             }
         }
@@ -182,6 +187,7 @@ const RestaurantRegisterScreen = () => {
                 setNewUser(response.data)
                 return response.data.id;;
             }
+
         }
         catch (ex) {
             if (ex.response) {
@@ -245,50 +251,58 @@ const RestaurantRegisterScreen = () => {
         try {
             const newUserId = await createNewUser(); // tao nguoi dung truoc
 
+            if (newUserId) {
+                await fetchAddress(query);
+                if (addressRes.address) {
+                    const form = new FormData();
+                    for (let r in resInfo)
+                        if (r !== 'confirm')
+                            form.append(r, resInfo[r]);
+                    form.append('active', false);
 
-            const form = new FormData();
-            for (let r in resInfo)
-                if (r !== 'confirm')
-                    form.append(r, resInfo[r]);
-            form.append('active', false);
+                    form.append('owner', Number(newUserId));
 
-            form.append('owner', Number(newUserId));
 
-            await fetchAddress(query);
-            form.append('address', addressRes.address);
-            form.append('latitude', addressRes.latitude);
-            form.append('longitude', addressRes.longitude);
+                    form.append('address', addressRes.address);
+                    form.append('latitude', addressRes.latitude);
+                    form.append('longitude', addressRes.longitude);
 
-            if (imageRes) {
-                form.append('image', {
-                    uri: imageRes.uri,
-                    name: imageRes.uri.split('/').pop(),
-                    type: 'imageRes/png'
-                });
+                    if (imageRes) {
+                        form.append('image', {
+                            uri: imageRes.uri,
+                            name: imageRes.uri.split('/').pop(),
+                            type: 'imageRes/png'
+                        });
+                    }
+                    else {
+                        form.append('image', 'Have not uploaded photos yet');
+                    }
+
+
+                    console.info("Form data:", JSON.stringify(
+                        Object.fromEntries(form.entries()),
+                        null,
+                        2
+                    ));
+
+                    const response = await RestaurantAPIs.post(endpoints['createRestaurant'], form, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        }
+                    })
+
+
+                    if (response.status === 201) {
+                        console.log(response.data);
+
+                        Alert.alert('Đã gửi yêu cầu', 'Tài khoản sẽ sớm được xác nhận!');
+                    }
+                }
             }
             else {
-                form.append('image', 'Have not uploaded photos yet');
+                Alert.alert('Thông báo', 'Lỗi thông tin tài khoản người dùng!');
             }
 
-
-            console.info("Form data:", JSON.stringify(
-                Object.fromEntries(form.entries()),
-                null,
-                2
-            ));
-
-            const response = await RestaurantAPIs.post(endpoints['createRestaurant'], form, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                }
-            })
-
-
-            if (response.status === 201) {
-                console.log(response.data);
-
-                Alert.alert('Đã gửi yêu cầu', 'Tài khoản sẽ sớm được xác nhận!');
-            }
         }
         catch (ex) {
             if (ex.response) {

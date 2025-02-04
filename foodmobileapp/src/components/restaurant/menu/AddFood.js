@@ -103,7 +103,9 @@ const AddFood = ({ route, navigation }) => {
             for (let f in food)
                 if (f !== 'confirm')
                     form.append(f, food[f]);
-            form.append('category', value);
+            if (value) {
+                form.append('category', value);
+            }
             form.append('serve_period', valueTime || 'Cả ngày');
             form.append('is_available', true);
             if (image) {

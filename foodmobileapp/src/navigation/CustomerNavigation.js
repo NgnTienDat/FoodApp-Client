@@ -14,7 +14,7 @@ import LoginScreen from '../screens/auth/Login';
 import RegisterScreen from '../screens/auth/Register';
 import RestaurantRegisterScreen from '../screens/auth/RestaurantRegister';
 import { MyUserContext } from '../config/UserContexts';
-import MySearchBar from '../components/customer/SearchingBar';
+import MySearchBar, { SearchView } from '../components/customer/SearchingBar';
 import SearchedScreen, { FoodRoute, RestaurantRoute } from '../screens/customer/Searched';
 import FoodFilter from '../components/customer/FoodFilter';
 import { CardStyleInterpolators } from '@react-navigation/stack';
@@ -134,8 +134,9 @@ const RootNavigator = () => {
                 }} />
             <Stack.Screen name='SearchedScreen' component={SearchedScreen}
                 options={{
-                    title: 'eh', headerShown: true, header: () => (
-                        <MySearchBar />
+                    title: 'eh', headerShown: true, 
+                    header: () => (
+                        <SearchView />
                     )
                 }} />
             <Stack.Screen name='RegisterScreen' component={RegisterScreen} options={{ title: 'Đăng ký', headerShown: true }} />

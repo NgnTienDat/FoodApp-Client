@@ -60,7 +60,7 @@ const RestaurantScreen1 = ({ route }) => {
         try {
             setLoading(true);
             let res = await APIs.get(endpoints['restaurant-foods'](restaurantId));
-            // console.info('FOODS', res.data)
+            console.info('FOODS', res.data)
             setFoods(res.data);
         } catch (ex) {
             console.error(ex);

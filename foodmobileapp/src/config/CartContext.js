@@ -4,13 +4,13 @@ import { MyUserContext } from "./UserContexts"
 
 export const CartContext = createContext()
        
-const CartProvider = ({ children }) => {   
+const CartProvider = ({ children }) => {         
    
     const [itemNumbers, setItemNumbers] = useState(0)                          
-    const [cart, setCart] = useState(null)  
+    const [cart, setCart] = useState(null)     
     
         
-    const user = useContext(MyUserContext)        
+    const user = useContext(MyUserContext)               
     const getMyCart = async () => {
         try {                        
             // if (!user) {

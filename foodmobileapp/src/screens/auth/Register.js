@@ -8,6 +8,7 @@ import QueryString from "qs"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { MyDispatchContext } from "../../config/UserContexts"
 import * as ImagePicker from 'expo-image-picker';
+import RegisterStyles from "../../styles/customer/RegisterStyles"
 
 
 const RegisterScreen = () => {

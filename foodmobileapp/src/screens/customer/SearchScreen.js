@@ -1,4 +1,4 @@
-import { Text, TextInput, TouchableOpacity, View } from "react-native"
+import { FlatList, Text, TextInput, TouchableOpacity, View } from "react-native"
 import CustomerStyles from "../../styles/CustomerStyles"
 import { useNavigation } from "@react-navigation/native"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
@@ -8,6 +8,7 @@ import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet"
 import { useMainCategories } from "../../api/HookCustomer"
 import { SearchContext } from "../../config/UserContexts"
 import APIs, { endpoints } from "../../config/APIs"
+import MySearchBar from "../../components/customer/SearchingBar"
 
 
 const SearchScreen = () => {
@@ -20,9 +21,38 @@ const SearchScreen = () => {
     const mainCategories = useMainCategories()
     const [result, setResult] = useState([])
 
+    const { searchKeyWord, suggestions, setSuggestions } = useContext(SearchContext)
 
+    const loadSuggestions = async () => {
+        if (page > 0) {
+            setLoading(true)
+            try {
+                let url = `${endpoints['restaurantFoods'](restaurantId)}?page=${page}`
+                if (q)
+                    url = `${url}&q=${q}`;
+                console.info(url)
+
+                let res = await RestaurantAPIs.get(url);
+
+                if (page > 1)
+                    setFoods(current_res => [...current_res, ...res.data.results])
+                else
+                    setFoods(res.data.results)
+
+                if (!res.data.next) {
+                    setPage(0);
+                }
+
+
+            } catch (ex) {
+                console.error('aaaaa' + ex);
+            } finally {
+                setLoading(false);
+            }
+        }
+    }
     // const {searchKeyWord, filters, setFilters} = useContext(SearchContext)
-    
+
     const priceRanges2 = [
         { name: 'Dưới 20.000đ', min_price: 0, max_price: 20000 },
         { name: '20.000 - 50.000đ', min_price: 20000, max_price: 50000 },
@@ -81,6 +111,22 @@ const SearchScreen = () => {
     };
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
+
+            {/* Dropdown list hiển thị các nhà hàng gợi ý */}
+            {/* <FlatList
+                data={suggestions}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={({ item }) => (
+                    <TouchableOpacity
+                    
+                    >
+                        <Text >{item.restaurant}</Text>
+                    </TouchableOpacity>
+                )}
+                
+            /> */}
+
+            {/* <MySearchBar/> */}
 
             <View style={{ flex: 1, backgroundColor: '#ccc' }}>
 

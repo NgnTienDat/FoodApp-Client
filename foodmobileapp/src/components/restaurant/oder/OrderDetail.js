@@ -14,7 +14,7 @@ const OrderDetail = ({ navigation, route }) => {
         setLoading(true);
         try {
             let res = await RestaurantAPIs.get(endpoints['statusOrder'](orderId));
-            // console.info(res.data);
+            console.info('ORDERS: ',res.data);
             setOrder(res.data)
         } catch (ex) {
             console.error('Loi tai don hang:', ex);

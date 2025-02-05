@@ -25,6 +25,7 @@ import ChatRoom from '../components/restaurant/oder/ChatRoom';
 import AddOrderCheck from '../components/restaurant/oder/AddOrderCheck';
 import SetShippingFee from '../components/restaurant/SetShippingFee';
 import FoodReview from '../components/restaurant/FoodReview';
+import RestaurantLocation from '../components/restaurant/RestaurantLocation';
 
 
 const Tab = createBottomTabNavigator();
@@ -137,6 +138,7 @@ const ProfileStackNavigator = () => {
             <Stack.Navigator >
                 <Stack.Screen name="profile" component={RestaurantProfile} options={{ headerShown: false, title: 'Tôi', tabBarIcon: () => <Icon source="account-outline" size={30} /> }} />
                 <Stack.Screen name="set_ship" component={SetShippingFee} options={{ title: 'Tùy chỉnh giá vận chuyển' }} />
+                <Stack.Screen name="restaurant_location" component={RestaurantLocation} options={{ title: 'Vị trí cửa hàng' }} />
             </Stack.Navigator>
         </>
     );

@@ -1,22 +1,25 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
-
-const BASE_URL = 'http://192.168.1.16:8000/';
+// const BASE_URL = 'http://192.168.1.16:8000/';
 // const BASE_URL = 'http://192.168.1.13:8000/';
 // const BASE_URL = 'http://192.168.1.8:8000/';
 // const BASE_URL = 'http://192.168.1.213:8000/';
 // const BASE_URL = 'http://192.168.1.2:8000/';
 
 
+// const BASE_URL = 'http://192.168.1.12:8000/';
+// const BASE_URL = 'http://192.168.1.213:8000/';
 
+// TRUNG LOGIN - Không dùng thì comment lại
+const BASE_URL = 'http://192.168.10.200:8000';
 
 
 export const endpoints = {
     'restaurants': '/restaurants/',
     'main_categories': '/main_categories/',
     'login': '/o/token/',
-    'current-user': '/users/current-user/',
+    'current-user': '/users/current-user',
     'register': '/users/',
     'foods': '/foods/',
     'search-food': '/search-food/',
@@ -37,11 +40,9 @@ export const endpoints = {
     'followed-restaurant': '/followed-restaurant/',
     'reviews': '/reviews/',
     'momo-payment': '/momo-payment/',
-    
-
 }
 
-export const authApis = async () => {     
+export const authApis = async () => {
     const token = await AsyncStorage.getItem('token')
     return axios.create({
         baseURL: BASE_URL,
@@ -50,8 +51,6 @@ export const authApis = async () => {
         }
     })
 }
-
-
 
 export default axios.create({
     baseURL: BASE_URL

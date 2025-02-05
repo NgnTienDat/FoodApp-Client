@@ -9,6 +9,7 @@ import { MyDispatchContext, MyUserContext } from "../../config/UserContexts";
 
 
 const RestaurantProfile = ({ navigation }) => {
+    const dispatch = useContext(MyDispatchContext)
     const user = useContext(MyUserContext)
     const restaurantId = user.restaurant_id
     const [restaurant, setRestaurant] = useState([]);
@@ -44,9 +45,10 @@ const RestaurantProfile = ({ navigation }) => {
             </View>
 
             <View>
-                <TouchableOpacity style={CustomerStyles.menuItem}>
+                <TouchableOpacity style={CustomerStyles.menuItem}
+                    onPress={() => navigation.navigate('restaurant_location')}>
                     <Text style={CustomerStyles.menuText}>
-                        <Text style={{ fontSize: 18 }}>⚙️</Text> Cài đặt
+                        <Text style={{ fontSize: 18 }}>📍</Text> Vị trí của tôi
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={CustomerStyles.menuItem}
@@ -55,7 +57,11 @@ const RestaurantProfile = ({ navigation }) => {
                         <Text style={{ fontSize: 18 }}>📄</Text> Tùy chỉnh phí vận chuyển
                     </Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={CustomerStyles.logoutButton}>
+                <TouchableOpacity style={CustomerStyles.logoutButton}
+                    onPress={async () => {
+                        dispatch({ type: "logout" });
+                        navigation.replace('LoginScreen');
+                    }}>
                     <Text style={CustomerStyles.logoutText}>Đăng xuất</Text>
                 </TouchableOpacity>
             </View>

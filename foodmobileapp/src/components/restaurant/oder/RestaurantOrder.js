@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Modal, ScrollView, Alert } from "react-native";
+import { View, Text, TouchableOpacity, Modal, ScrollView, Alert, ActivityIndicator } from "react-native";
 import RestaurantStyles from "../../../styles/RestaurantStyles";
 import { useState, useEffect, useCallback } from "react";
 import RestaurantAPIs, { endpoints } from "../../../config/RestaurantAPIs";
@@ -115,16 +115,17 @@ const RestaurantOrder = () => {
 
     return (
         <View>
-            {loading ? (
-                <Text></Text>
-            ) : (
-                <OrderList
-                    orders={orders}
-                    onSelectOrder={(order) => { setSelectedOrder(order); setModalVisible(true); }}
-                    onCancel={cancelOrder}
-                    onConfirm={confirmOrder}
-                />
-            )}
+            <View>
+                {loading && <ActivityIndicator />}
+            </View>
+
+            <OrderList
+                orders={orders}
+                onSelectOrder={(order) => { setSelectedOrder(order); setModalVisible(true); }}
+                onCancel={cancelOrder}
+                onConfirm={confirmOrder}
+            />
+
 
             {selectedOrder && (
                 <Modal

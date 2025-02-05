@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, FlatList, StyleSheet, TextInput, TouchableOpacity, Image, Alert } from "react-native";
+import { View, Text, FlatList, StyleSheet, TextInput, TouchableOpacity, Image, Alert, ActivityIndicator } from "react-native";
 import { useContext } from "react";
 import { MyUserContext } from "../../config/UserContexts";
 import RestaurantAPIs, { authApis, endpoints } from "../../config/RestaurantAPIs";
@@ -9,7 +9,7 @@ import RestaurantStyles from "../../styles/RestaurantStyles";
 const FoodReview = ({ navigation, route }) => {
     const [replyTexts, setReplyTexts] = useState({});
 
-
+    const [loading, setLoading] = useState(false);
     const user = useContext(MyUserContext)
     const restaurantId = user.restaurant_id
     const { foodId } = route.params || {};
@@ -18,6 +18,7 @@ const FoodReview = ({ navigation, route }) => {
 
 
     const loadDetailFood = async () => {
+        setLoading(true);
         try {
             let url = `${endpoints['detailFood'](foodId)}`
             let res = await RestaurantAPIs.get(url)
@@ -31,6 +32,7 @@ const FoodReview = ({ navigation, route }) => {
     }
 
     const loadListReview = async () => {
+        setLoading(true);
         try {
             let url = `${endpoints['listReviewFood'](foodId)}`
             let res = await RestaurantAPIs.get(url)
@@ -80,6 +82,10 @@ const FoodReview = ({ navigation, route }) => {
 
     return (
         <View style={styles.container}>
+
+            <View>
+                {loading && <ActivityIndicator />}
+            </View>
             <View style={styles.dishInfoContainer}>
                 <View style={styles.dishInfoLeft}>
                     <Text style={styles.reviewTitle}>{detail_food.name}</Text>

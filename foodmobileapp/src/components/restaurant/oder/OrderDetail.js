@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ScrollView, Text, View, Alert } from 'react-native';
+import { ScrollView, Text, View, Alert, ActivityIndicator } from 'react-native';
 import RestaurantStyles from "../../../styles/RestaurantStyles";
 import RestaurantAPIs, { endpoints } from "../../../config/RestaurantAPIs";
 import { Button } from 'react-native-paper';
@@ -93,6 +93,10 @@ const OrderDetail = ({ navigation, route }) => {
 
     return (
         <View style={{ flex: 1 }}>
+
+            <View>
+                {loading && <ActivityIndicator />}
+            </View>
             <ScrollView>
                 <View style={RestaurantStyles.headerOrder}>
                     <View style={{ marginBottom: 10, }}>

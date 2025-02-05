@@ -40,20 +40,20 @@ const LoginScreen = () => {
             // dùng qs.stringify để mã hóa data từ object thành dạng application/x-www-form-urlencoded
             // vì làm giống thầy nó trả về 400 bad request là gửi dạng JSON
             // DAT LOGIN
-            const loginData = QueryString.stringify({
-                'client_id': 'QvhI26LJ0bwHurLgrMoEYRy5OPeMrMLbmGLtZxGE',
-                'client_secret': 'Muy7Hq81uX5ElvZTT3zMr84CkzreJ4qXZsiTc7OYYwMCrNAL6UxZTeztJRri2mGxihlT2yDaqX9ZDpCbmx2FBkKBTWEwJ0dZzOeGaxSKG001yxXpodHBpXwk6DvVVmCY',
-                'grant_type': 'password',
-                ...user
-            })
-
-            //TRUNG LOGIN - Không dùng thì comment lại
             // const loginData = QueryString.stringify({
-            //     'client_id': 'IAxWoaNARM6sxC95v3VrfNa8w6MzWc6LLWrA7rZf',
-            //     'client_secret': 'LZtLFRzPH1oGFW9eDaY77Bcol7RPy1T5h5BWxoIR1puFi2vpyvOZngulwnhSmclSYWLdBFQ0pAQNWzgfwK9C7LpMwiNtPtfM3HOQ7rbaWGVhTNI4RYbGbgJZmiLkHx2F',
+            //     'client_id': 'QvhI26LJ0bwHurLgrMoEYRy5OPeMrMLbmGLtZxGE',
+            //     'client_secret': 'Muy7Hq81uX5ElvZTT3zMr84CkzreJ4qXZsiTc7OYYwMCrNAL6UxZTeztJRri2mGxihlT2yDaqX9ZDpCbmx2FBkKBTWEwJ0dZzOeGaxSKG001yxXpodHBpXwk6DvVVmCY',
             //     'grant_type': 'password',
             //     ...user
             // })
+
+            // TRUNG LOGIN - Không dùng thì comment lại
+            const loginData = QueryString.stringify({
+                'client_id': 'IAxWoaNARM6sxC95v3VrfNa8w6MzWc6LLWrA7rZf',
+                'client_secret': 'LZtLFRzPH1oGFW9eDaY77Bcol7RPy1T5h5BWxoIR1puFi2vpyvOZngulwnhSmclSYWLdBFQ0pAQNWzgfwK9C7LpMwiNtPtfM3HOQ7rbaWGVhTNI4RYbGbgJZmiLkHx2F',
+                'grant_type': 'password',
+                ...user
+            })
 
             const res = await APIs.post(endpoints['login'], loginData, {
                 // cho server biết dữ liệu trong body được mã hóa theo chuẩn x-www-form-urlencoded.
@@ -75,10 +75,6 @@ const LoginScreen = () => {
             dispatch({ 'type': 'login', 'payload': resolvedData })
             // console.info("SAU DISPATCH: \n")
 
-
-            
-            
-            
             if (resolvedData && resolvedData.role) {
                 if (resolvedData.role === "customer") {
                     nav.navigate('MainTabs');

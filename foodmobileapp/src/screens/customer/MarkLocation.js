@@ -68,7 +68,7 @@ const MarkLocation = () => {
                     {
                         params: {
                             input: text,
-                            key: 'AlzaSyc3Wy66Oug_YSay2HDl9EUqkyN9hrtLfJu',
+                            key: 'AlzaSyVAMUgPYQZuhs-e59WyqvXT3vI6fHbHJ8Q',
                             location: '10.7769,106.7009', // Tọa độ trung tâm TP.HCM
                             radius: 50000,
                         },

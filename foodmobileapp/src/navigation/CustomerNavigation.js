@@ -37,6 +37,7 @@ import FollowedRestaurant from '../screens/customer/FollowedRestaurant';
 import Evaluation from '../screens/customer/Evaluation';
 import MomoPaymentWebView from '../screens/customer/MomoPaymentWebView';
 import Reviews from '../screens/customer/Reviews';
+import RestaurantLocation from '../screens/customer/RestaurantLocation';
 
 export const Stack = createNativeStackNavigator()
 
@@ -74,7 +75,7 @@ const FollowStackNavigator = () => {
 const OrderStackNavigator = () => {
     return (
         <Stack.Navigator screenOptions={{ headerShown: true }}>
-            <Stack.Screen name='OrderScreen' component={OrderScreen} />
+            <Stack.Screen name='Đơn hàng của bạn' component={OrderScreen} />
 
         </Stack.Navigator>
     )
@@ -173,6 +174,7 @@ const RootNavigator = () => {
             <Stack.Screen name='EvaluationScreen' component={Evaluation} options={{ title: 'Đánh giá món ăn', headerShown: true }} />
             <Stack.Screen name='MomoPaymentWebView' component={MomoPaymentWebView} options={{ title: 'Thanh toán Momo', headerShown: true }} />
             <Stack.Screen name='ReviewsScreen' component={Reviews} options={{ title: 'Các đánh giá', headerShown: true }} />
+            <Stack.Screen name='RestaurantLocationScreen' component={RestaurantLocation} options={{ title: 'Vị trí nhà hàng', headerShown: true }} />
 
         </Stack.Navigator>
     )

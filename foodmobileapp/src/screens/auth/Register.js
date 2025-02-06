@@ -66,6 +66,11 @@ const RegisterScreen = () => {
     }
 
     const register = async () => {
+
+        if (!validateForm()) {
+            return
+        }
+
         try {
             setLoading(true)
 
@@ -79,12 +84,6 @@ const RegisterScreen = () => {
                 Alert.alert("Lỗi", "Vui lòng điền đầy đủ thông tin!");
                 return;
             }
-
-            // const form = new FormData()
-            // for (let k in users)
-            //     if (k !== 'confirm')
-            //         form.append(k.field, users[k]);
-
 
             const form = new FormData()
             form.append("email", user.email)
@@ -116,24 +115,15 @@ const RegisterScreen = () => {
                 }
             })
 
-
+            Alert.alert("Thành công", "Đăng ký tài khoản thành công!")
             nav.navigate('LoginScreen')
         } catch (error) {
-            if (error.response) {
-                // Lỗi từ phía server (HTTP status)
-                console.error("Response Error:", error.response.data);
-            } else if (error.request) {
-                // Không nhận được phản hồi từ server
-                console.error("Request Error:", error.request);
-            } else {
-                // Lỗi khác
-                console.error("Error:", error.message);
-            }
+            console.error("Error:", error)
         } finally {
             setLoading(false)
         }
     }
-
+    const [errors, setErrors] = useState({});
     const hasError = (field) => {
         if (!user[field]) return "Trường này không được để trống!";
 
@@ -147,63 +137,32 @@ const RegisterScreen = () => {
 
         return null;
     }
+    const validateForm = () => {
+        let newErrors = {}
 
-    // const register = async () => {
-    //     try {
-    //         setLoading(true);
+        if (!user.email) newErrors.email = "Trường này không được để trống!"
+        else if (!/\S+@\S+\.\S+/.test(user.email)) newErrors.email = "Email không hợp lệ!"
 
-    //         // Kiểm tra mật khẩu và xác nhận mật khẩu
-    //         if (user.password !== user.confirm_password) {
-    //             Alert.alert("Lỗi", "Mật khẩu và xác nhận mật khẩu không khớp!");
-    //             return;
-    //         }
+        if (!user.phone_number) newErrors.phone_number = "Trường này không được để trống!"
+        else if (!/^\d{10}$/.test(user.phone_number)) newErrors.phone_number = "Số điện thoại không hợp lệ!"
 
-    //         // Kiểm tra các trường bắt buộc
-    //         if (!user.email || !user.username || !user.password || !user.phone_number) {
-    //             Alert.alert("Lỗi", "Vui lòng điền đầy đủ thông tin!");
-    //             return;
-    //         }
+        if (!user.username) newErrors.username = "Trường này không được để trống!"
 
-    //         // Chuẩn bị dữ liệu để gửi
-    //         const formData = new FormData();
-    //         formData.append("email", user.email);
-    //         formData.append("phone_number", user.phone_number);
-    //         formData.append("username", user.username);
-    //         formData.append("password", user.password);
+        if (!user.password) newErrors.password = "Trường này không được để trống!"
+        else if (user.password.length < 3) newErrors.password = "Mật khẩu phải có ít nhất 3 ký tự!"
 
-    //         if (avatar) {
-    //             formData.append("avatar", {
-    //                 uri: avatar.uri,
-    //                 name: avatar.uri.split("/").pop(),
-    //                 type: "image/jpeg", // Hoặc image/png tùy theo ảnh
-    //             });
-    //         }
+        if (!user.confirm_password) newErrors.confirm_password = "Trường này không được để trống!"
+        else if (user.confirm_password !== user.password) newErrors.confirm_password = "Mật khẩu không khớp!"
 
-    //         // Gửi yêu cầu đến API đăng ký
-    //         const res = await APIs.post(endpoints["register"], formData, {
-    //             headers: {
-    //                 "Content-Type": "multipart/form-data",
-    //             },
-    //         });
-
-    //         // Thông báo đăng ký thành công và điều hướng đến màn hình đăng nhập
-    //         Alert.alert("Thành công", "Đăng ký tài khoản thành công!");
-    //         nav.navigate("LoginScreen");
-    //     } catch (error) {
-    //         console.error(error);
-    //         Alert.alert("Lỗi", "Đăng ký thất bại, vui lòng thử lại!");
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
-
-
+        setErrors(newErrors)
+        return Object.keys(newErrors).length === 0
+    }
 
     return (
         <View style={RegisterStyles.container}>
 
             {Object.values(users).map(u =>
-                <View key={u.field} style={{width: '100%'}}>
+                <View key={u.field} style={{ width: '100%' }}>
 
                     <TextInput
                         label={u.title}
@@ -213,8 +172,9 @@ const RegisterScreen = () => {
                         placeholder={u.title}
                         value={user[u.field]}
                         onChangeText={t => updateUser(t, u.field)} />
-                    <HelperText type="error" visible={!!hasError(u.field)}>
-                        {hasError(u.field)}
+
+                    <HelperText type="error" visible={!!errors[u.field]}>
+                        {errors[u.field]}
                     </HelperText>
                 </View>
             )

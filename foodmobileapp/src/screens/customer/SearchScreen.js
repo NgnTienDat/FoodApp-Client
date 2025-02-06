@@ -112,22 +112,6 @@ const SearchScreen = () => {
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
 
-            {/* Dropdown list hiển thị các nhà hàng gợi ý */}
-            {/* <FlatList
-                data={suggestions}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item }) => (
-                    <TouchableOpacity
-                    
-                    >
-                        <Text >{item.restaurant}</Text>
-                    </TouchableOpacity>
-                )}
-                
-            /> */}
-
-            {/* <MySearchBar/> */}
-
             <View style={{ flex: 1, backgroundColor: '#ccc' }}>
 
                 <TouchableOpacity style={CustomerStyles.filterButton}
@@ -145,6 +129,7 @@ const SearchScreen = () => {
                     index={-1}
                     snapPoints={snapPoints}
                     enablePanDownToClose={true}
+                   
                 >
                     <BottomSheetView >
                         <View>

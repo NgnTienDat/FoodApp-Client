@@ -52,7 +52,7 @@ export const FoodItem = ({ item, routeName, params }) => {
                 </View>
                 <View style={styles.foodInfo}>
                     <Text style={styles.foodName}>{item.name}</Text>
-                    <Text style={styles.foodPrice}>{item.description}</Text>
+                    <Text style={{fontSize: 12}}>{item.description}</Text>
                     <Text style={styles.foodPrice}>{formatPrice(item.price)}đ</Text>
                 </View>
                 <TouchableOpacity

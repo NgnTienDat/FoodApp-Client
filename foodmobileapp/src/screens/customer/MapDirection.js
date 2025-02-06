@@ -16,7 +16,7 @@ const MapDirections = () => {
                     {
                         params: {
                             input: text,
-                            key: 'AlzaSyc3Wy66Oug_YSay2HDl9EUqkyN9hrtLfJu', // Thay bằng API Key của bạn
+                            key: 'AlzaSyVAMUgPYQZuhs-e59WyqvXT3vI6fHbHJ8Q', 
                         },
                     }
                 );

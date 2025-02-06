@@ -1,6 +1,6 @@
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, TextInput, Image, TouchableOpacity, FlatList, StyleSheet, ImageBackground, StatusBar, ActivityIndicator, ScrollView, Dimensions, TouchableHighlight, SafeAreaView } from 'react-native';
+import { View, Text, TextInput, Image, TouchableOpacity, FlatList, StyleSheet, ImageBackground, StatusBar, ActivityIndicator, ScrollView, Dimensions, TouchableHighlight, SafeAreaView, SectionList } from 'react-native';
 import { Icon } from 'react-native-paper';
 import APIs, { authApis, endpoints } from '../../config/APIs';
 import Animated, { Extrapolation, interpolate, interpolateColor, useAnimatedRef, useAnimatedScrollHandler, useAnimatedStyle, useScrollViewOffset, useSharedValue } from 'react-native-reanimated';
@@ -22,6 +22,7 @@ const RestaurantScreen1 = ({ route }) => {
     const [searchQuery, setSearchQuery] = useState('')
     const [restaurant, setRestaurant] = useState(null)
     const [foods, setFoods] = useState([])
+    const [menus, setMenus] = useState([])
     const [loading, setLoading] = useState(false)
     const [follow, setFollow] = useState(false)
     const [subCart, setSubCart] = useState(null)
@@ -39,13 +40,16 @@ const RestaurantScreen1 = ({ route }) => {
             setLoading(true);
 
             let res = await APIs.get(endpoints['restaurant-detail'](restaurantId));
-            console.info(res.data)
+            console.info('RESTAURANT INFO: ', res.data)
+            console.info('lat : ', res.data.latitude)
+            console.info('lng : ', res.data.longitude)
+
             setRestaurant(res.data);
 
 
             const authTokenApi = await authApis()
             const resFollow = await authTokenApi.get(endpoints['follow-restaurant'](restaurantId))
-            console.log('res is follow: ', resFollow.data)
+            // console.log('res is follow: ', resFollow.data)
             setFollow(resFollow.data.is_following)
 
 
@@ -59,8 +63,14 @@ const RestaurantScreen1 = ({ route }) => {
     const loadFood = async () => {
         try {
             setLoading(true);
-            let res = await APIs.get(endpoints['restaurant-foods'](restaurantId));
-            console.info('FOODS', res.data)
+            let res = await APIs.get(endpoints['restaurant-foods'](restaurantId))
+            let menuResponse = await APIs.get(endpoints['restaurant-menus'](restaurantId))
+
+            // console.log('Menu: ', menuResponse.data)
+            setMenus(menuResponse.data);
+
+
+            // console.info('FOODS', res.data)
             setFoods(res.data);
         } catch (ex) {
             console.error(ex);
@@ -116,6 +126,12 @@ const RestaurantScreen1 = ({ route }) => {
 
     const handlePressFollow = async (restaurantId) => {
         try {
+
+            if (!user) {
+                console.log("Chua dang nhap");
+                nav.navigate('LoginScreen');
+                return;
+            }
             const authTokenApi = await authApis()
             const response = await authTokenApi.post(endpoints['follow-restaurant'](restaurantId))
 
@@ -140,14 +156,138 @@ const RestaurantScreen1 = ({ route }) => {
 
             <View style={[styles.header,]}>
                 {restaurant && (
-                    <Text style={styles.restaurantNameHeader}>{restaurant.name}</Text>
+                    <View style={{ flexDirection: 'row' }}>
+                        <Text style={styles.restaurantNameHeader}>{restaurant.name}</Text>
+                        <TouchableOpacity style={{ marginTop: 40 }} 
+                            onPress={() => nav.navigate('RestaurantLocationScreen', {'RestaurantId': restaurantId})}
+                        >
+                            <Icon source="map-check-outline" size={25} />
+                        </TouchableOpacity>
+                    </View>
                 )}
             </View>
             <BackButton />
 
+            {restaurant &&
+                <SectionList
+
+                    stickySectionHeadersEnabled={true}
+                    showsVerticalScrollIndicator={false}
+                    contentContainerStyle={{ paddingBottom: 100 }}
+                    sections={[
+                        {
+                            title: '',
+                            data: [{ type: 'restaurantInfo' }], // Section for restaurant info
+                        },
+                        {
+                            title: '',
+                            data: [{ type: 'searchBar' }], // Section for search bar
+                        },
+                        ...menus.map((section) => ({
+                            title: section.name,
+                            data: section.food,
+                        })), // Sections for food menus
+                        {
+                            title: 'Món ngon phải thử',
+                            data: foods,
+                        },
+                    ]}
+                    keyExtractor={(item, index) => `${item.type}-${index}`}
+                    renderSectionHeader={({ section: { title } }) =>
+                        title !== '' && (
+                            <View style={styles.sectionHeader}>
+                                <Text style={styles.sectionTitle}>{title}</Text>
+                            </View>
+                        )
+                    }
+                    renderItem={({ item }) => {
+                        // Render each section's content based on `item.type`
+                        if (item.type === 'restaurantInfo') {
+                            return (
+                                <>
+                                    {restaurant &&
+                                        <Image
+                                            source={{ uri: restaurant.image }}
+                                            style={[styles.restaurantImage,]}
+                                        />
+                                    }
+
+                                    {restaurant &&
+                                        <View style={styles.restaurantInfo}>
+                                            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                <Text style={styles.restaurantName}>{restaurant.name}</Text>
+                                                <TouchableOpacity style={styles.followButton}
+                                                    onPress={() => {
+                                                        setFollow(!follow)
+                                                        handlePressFollow(restaurantId)
+                                                    }}>
+                                                    <Text style={{ color: '#fff' }}>
+                                                        {follow === false ? 'Theo dõi' : 'Bỏ theo dõi'}
+                                                    </Text>
+                                                </TouchableOpacity>
+                                            </View>
+                                            <View style={styles.restaurantDetails}>
+                                                <Text style={styles.rating}>⭐ {restaurant.star_rate}</Text>
+                                                <Text style={styles.address}>Địa chỉ: {restaurant.address}</Text>
+                                            </View>
+                                            <Text style={{ textAlign: 'right', fontSize: 17, color: '#EE4D2D' }}
+                                                onPress={() => nav.navigate('ReviewsScreen', { 'restaurantId': restaurantId })}
+                                            >Xem đánh giá</Text>
+                                        </View>
+                                    }
+                                </>
+                            );
+                        }
+
+                        if (item.type === 'searchBar') {
+                            return (
+                                <>
+                                    {restaurant &&
+                                        <View style={{ backgroundColor: '#fff' }}>
+                                            <TextInput
+                                                style={styles.searchInput}
+                                                placeholder="Tìm món ăn"
+                                                value={searchQuery}
+                                                onChangeText={setSearchQuery}
+                                            />
+
+                                            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                                                {items.map((item, index) => (
+                                                    <TouchableOpacity key={index} style={{ padding: 20, backgroundColor: '#fff' }}>
+                                                        <Text>{item}</Text>
+                                                    </TouchableOpacity>
+                                                ))}
+                                            </ScrollView>
+                                        </View>
+                                    }
+                                </>
+                            )
+                        }
+                        if (item.type === 'horizontalList') {
+                            return (
+                                <FoodItem
+                                    item={item}
+                                    routeName="FoodDetail"
+                                    params={{ FoodId: item.id }}
+                                />
+                            );
+                        }
+
+
+                        return (
+                            <FoodItem
+                                item={item}
+                                routeName="FoodDetail"
+                                params={{ FoodId: item.id }}
+                            />
+                        );
+                    }}
+                />
+            }
             {/* {restaurant && <ActivityIndicator size={'large'}/>} */}
 
-            <ScrollView
+
+            {/* <ScrollView
                 stickyHeaderIndices={[2]}
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{ paddingBottom: 100 }}
@@ -178,9 +318,9 @@ const RestaurantScreen1 = ({ route }) => {
                             <Text style={styles.rating}>⭐ {restaurant.star_rate}</Text>
                             <Text style={styles.address}>Địa chỉ: {restaurant.address}</Text>
                         </View>
-                        <Text style={{  textAlign: 'right' ,fontSize: 17, color: '#EE4D2D' }}
-                                onPress={() => nav.navigate('ReviewsScreen', {'restaurantId': restaurantId})}
-                            >Xem đánh giá</Text>
+                        <Text style={{ textAlign: 'right', fontSize: 17, color: '#EE4D2D' }}
+                            onPress={() => nav.navigate('ReviewsScreen', { 'restaurantId': restaurantId })}
+                        >Xem đánh giá</Text>
                     </View>
                 }
 
@@ -206,8 +346,7 @@ const RestaurantScreen1 = ({ route }) => {
                 {foods.map((item, index) =>
                     <FoodItem key={index} item={item} routeName="FoodDetail" params={{ "FoodId": item.id }} />
                 )}
-            </ScrollView>
-
+            </ScrollView> */}
 
             {subCart &&
                 <View style={styles.bottomSubCart}>
@@ -234,6 +373,16 @@ const RestaurantScreen1 = ({ route }) => {
 };
 
 const styles = StyleSheet.create({
+    sectionHeader: {
+        backgroundColor: '#ccc',
+        padding: 10,
+        paddingLeft: 15,
+    },
+    sectionTitle: {
+
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
     container: {
         flex: 1,
         backgroundColor: '#f8f9fa',

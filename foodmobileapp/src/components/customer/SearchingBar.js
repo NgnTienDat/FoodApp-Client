@@ -49,17 +49,11 @@ const MySearchBar = () => {
             console.info("URL", url);
 
             let res = await APIs.get(url)
-            // setSuggestions(current_res => [...current_res, ...res.data])
-            setSuggestions(res.data)
+
+            setSuggestions(res.data.slice(0, 5))
             console.log('suggestions: ', res.data)
-            // if (page > 1)
-            // else
-            //     setFoods(res.data.results)
 
-            // if (!res.data.next) {
-            //     setPage(0);
-            // }
-
+            
 
         } catch (ex) {
             console.error('aaaaa' + ex);

@@ -39,7 +39,7 @@ const NewLocation = () => {
                 phone_number: phone,
             }
             const authTokenApi = await authApis()
-            const response = await authTokenApi.post(endpoints['my-address'], data)
+            const response = await authTokenApi.post(endpoints['new-address'], data)
 
             if (response.status === 200) {
 

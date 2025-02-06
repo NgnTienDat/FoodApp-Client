@@ -7,11 +7,14 @@ import * as ImagePicker from 'expo-image-picker';
 import RestaurantStyles from "../../styles/RestaurantStyles"
 import RestaurantAPIs, { endpoints } from "../../config/RestaurantAPIs"
 import axios from "axios";
+import { useNavigation } from "@react-navigation/native"
 
 const RestaurantRegisterScreen = () => {
     const [loading, setLoading] = useState(false)
     const [image, setImage] = useState(null) // ảnh người dùng
     const [imageRes, setImageRes] = useState(null) // ảnh nhà hàng
+    const nav = useNavigation()
+
 
     //thong tin nguoi dung
     const [userInfo, setUserInfo] = useState({
@@ -296,7 +299,10 @@ const RestaurantRegisterScreen = () => {
                         console.log(response.data);
 
                         Alert.alert('Đã gửi yêu cầu', 'Tài khoản sẽ sớm được xác nhận!');
+                        
                     }
+                    
+                    nav.navigate('LoginScreen')
                 }
             }
             else {

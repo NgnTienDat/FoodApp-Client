@@ -122,7 +122,7 @@ export default Evaluation
         left: 180,
     },
     addLocation: {
-        position: 'absolute', bottom: 17,
+        position: 'absolute', bottom: 70,
         padding: 20,
         backgroundColor: Colors.ShoppeOrange,
         width: '95%',

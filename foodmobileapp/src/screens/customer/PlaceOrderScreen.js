@@ -1,7 +1,7 @@
 import { useContext, useEffect, useMemo, useRef, useState } from "react"
 import { ActivityIndicator, Image, Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { MyUserContext } from "../../config/UserContexts"
-import { useNavigation } from "@react-navigation/native"
+import { useIsFocused, useNavigation } from "@react-navigation/native"
 import APIs, { authApis, endpoints } from "../../config/APIs"
 import PriceFormatter from "../../components/customer/FormatPrice"
 import Colors from "../../config/Colors"
@@ -28,6 +28,7 @@ const PlaceOrderScreen = ({ route }) => {
     const [initCount, setInitCount] = useState(0)
     const [currentLocation, setCurrentLocation] = useState(null)
     const [deliveryFee, setDeliveryFee] = useState(0)
+    const isFocused = useIsFocused()
     const nav = useNavigation()
 
 
@@ -106,8 +107,8 @@ const PlaceOrderScreen = ({ route }) => {
             const data = {
                 sub_cart_id: subCart.id,
                 address_id: currentLocation.id,
-                shipping_fee: 23000,
-                total_price: subCart.total_price,
+                shipping_fee: deliveryFee,
+                total_price: subCart.total_price + deliveryFee,
                 payment: paymentMethod,
             }
             if (paymentMethod === 'momo') {
@@ -179,11 +180,13 @@ const PlaceOrderScreen = ({ route }) => {
     const isDisabled = count === 0
 
     useEffect(() => {
-        getSavedLocation()
-        loadSubCart()
-        handleDeliveryFee()
+        if (isFocused) {
+            getSavedLocation()
+            loadSubCart()
+            handleDeliveryFee()
+        }
 
-    }, [restaurantId]);
+    }, [restaurantId, isFocused]);
 
 
     return (

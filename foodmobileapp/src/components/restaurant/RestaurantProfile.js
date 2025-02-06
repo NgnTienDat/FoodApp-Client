@@ -19,6 +19,7 @@ const RestaurantProfile = ({ navigation }) => {
             console.info(user.id)
             let res = await RestaurantAPIs.get(endpoints['restaurant'](restaurantId))
             setRestaurant(res.data)
+            console.log('res data: ', res.data)
         }
         catch (ex) {
             console.error(ex);

@@ -102,8 +102,6 @@ export default StyleSheet.create({
   },
   searcherContainer: {
     flexDirection: 'row',
-
-
   },
   searchText: {
     flex: 1,

@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, Image, FlatList } from "react-native";
 
 import TopTab from "../../components/customer/TopTab";
 import CustomerStyles from "../../styles/CustomerStyles";
+import { useNavigation } from "@react-navigation/native";
 
 
 const data = [
@@ -38,6 +39,8 @@ const renderItems = ({ item }) => (
 
 
 const FoodRoute = ({ foods }) => {
+    const nav = useNavigation()
+
     return (
         <View>
 
@@ -45,8 +48,9 @@ const FoodRoute = ({ foods }) => {
                 data={foods}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => (
-                    <View style={CustomerStyles.restaurantContainer}>
-
+                    <TouchableOpacity style={CustomerStyles.restaurantContainer}
+                        onPress={() => nav.navigate('RestaurantScreen', {'RestaurantId':item.id})}
+                    >
                         <View style={CustomerStyles.header}>
                             <Image source={{ uri: item.image }} style={CustomerStyles.restaurantImage} />
                             <View style={CustomerStyles.restaurantInfo}>
@@ -60,7 +64,7 @@ const FoodRoute = ({ foods }) => {
                         {item.items.map((food) => renderItems({ item: food }))}
 
 
-                    </View>
+                    </TouchableOpacity>
                 )}
             />
         </View>
@@ -89,9 +93,9 @@ const SearchedScreen = ({ route }) => {
     const { foods } = route.params;
     console.log('foods: ', foods)
     const tabsForFoods = [
-        { name: "Món ăn", component: () => <FoodRoute foods={foods} /> },
-        { name: "Nhà hàng", component: () => <RestaurantRoute/> },
-        
+        { name: "Bạn đang tìm", component: () => <FoodRoute foods={foods} /> },
+        // { name: "Nhà hàng", component: () => <RestaurantRoute/> },
+
     ];
     return (
         <View style={{ flex: 1 }}>

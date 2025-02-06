@@ -1,16 +1,16 @@
 import { createContext, useContext, useEffect, useState } from "react"
 import APIs, { authApis, endpoints } from "./APIs"
 import { MyUserContext } from "./UserContexts"
-
-export const CartContext = createContext()
-       
-const CartProvider = ({ children }) => {   
    
+export const CartContext = createContext()    
+       
+const CartProvider = ({ children }) => {         
+      
     const [itemNumbers, setItemNumbers] = useState(0)                          
-    const [cart, setCart] = useState(null)  
+    const [cart, setCart] = useState(null)     
     
         
-    const user = useContext(MyUserContext)        
+    const user = useContext(MyUserContext)               
     const getMyCart = async () => {
         try {                        
             // if (!user) {
@@ -19,14 +19,14 @@ const CartProvider = ({ children }) => {
             // const authTokenApi = await authApis()   
             // const myCart = await authTokenApi.get(endpoints['my-cart'])
 
-    
+      
             // console.info('MY CART: ', myCart.data)
         
-            // setItemNumbers(myCart.data.items_number)
+            // setItemNumbers(myCart.data.items_number)   
             // setCart(myCart.data)
 
         } catch (error) {
-    
+      
         }
     }
     useEffect(() => {
@@ -41,4 +41,4 @@ const CartProvider = ({ children }) => {
     )   
 }  
   
-export default CartProvider
+export default CartProvider  

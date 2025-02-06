@@ -21,6 +21,7 @@ const DashBoard = ({ navigation }) => {
             setLoading(true);
             let res = await RestaurantAPIs.get(endpoints['restaurant'](restaurantId))
             setRestaurant(res.data)
+            
         }
         catch (ex) {
             console.error(ex);

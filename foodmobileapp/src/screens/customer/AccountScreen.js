@@ -28,12 +28,12 @@ const AccountScreen = () => {
                         </Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={CustomerStyles.menuItem} onPress={() => nav.navigate('MyRestaurant')}>
+                    {/* <TouchableOpacity style={CustomerStyles.menuItem} onPress={() => nav.navigate('MyRestaurant')}>
                         <Text style={CustomerStyles.menuText}>
                             <Text style={{ fontSize: 18 }} >
                                 🏠</Text> Nhà hàng của tôi
                         </Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
 
                     <TouchableOpacity style={CustomerStyles.menuItem}>
                         <Text style={CustomerStyles.menuText}>

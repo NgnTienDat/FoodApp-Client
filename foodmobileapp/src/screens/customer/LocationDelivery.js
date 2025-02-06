@@ -116,208 +116,208 @@ const LocationDelivery = () => {
             console.log('already location: ', response.data)
             setAlreadyLocation(response.data)
 
-
-        } catch (error) {
-            console.error('error: ', error);
+         
+            } catch (error) {
+                // console.error('error: ', error);
+            }
         }
-    }
 
 
     const changeLocation = async (locationId, index) => {
-        try {
+            try {
 
-            const selectedLocation = alreadyLocation[index];
+                const selectedLocation = alreadyLocation[index];
 
-            if (selectedLocation) {
-                console.log('Địa chỉ: ', selectedLocation);
+                if (selectedLocation) {
+                    console.log('Địa chỉ: ', selectedLocation);
 
-                const currentAddress = {
-                    formattedAddress: selectedLocation.address,
-                    latitude: deliveryLocation.latitude,
-                    longitude: deliveryLocation.longitude,
-                    receiver: selectedLocation.receiver_name,
-                    phone: selectedLocation.phone_number,
-                    id: selectedLocation.id
+                    const currentAddress = {
+                        formattedAddress: selectedLocation.address,
+                        latitude: deliveryLocation.latitude,
+                        longitude: deliveryLocation.longitude,
+                        receiver: selectedLocation.receiver_name,
+                        phone: selectedLocation.phone_number,
+                        id: selectedLocation.id
+                    }
+
+
+                    await AsyncStorage.setItem('deliveryLocation', JSON.stringify(currentAddress))
+                    getSavedLocation()
+
+                } else {
+                    console.error('Không tìm thấy địa chỉ này.');
                 }
-
-
-                await AsyncStorage.setItem('deliveryLocation', JSON.stringify(currentAddress))
-                getSavedLocation()
-
-            } else {
-                console.error('Không tìm thấy địa chỉ này.');
+            } catch (error) {
+                console.error('Lỗi khi đổi địa chỉ: ', error);
             }
-        } catch (error) {
-            console.error('Lỗi khi đổi địa chỉ: ', error);
-        }
-    };
+        };
 
-    const getSavedLocation = async () => {
-        const savedLocation = await GetSavedLocation()
-        if (savedLocation) {
-            console.log('Locatuion: ', savedLocation)
-            setDeliveryLocation(savedLocation)
-        }
-    }
-
-    const handleTransferTab = () => {
-        if (!user) {
-            console.log("Chua dang nhap");
-            nav.navigate('LoginScreen');
-            return;
-        } else {
-            nav.navigate('NewLocationScreen')
+        const getSavedLocation = async () => {
+            const savedLocation = await GetSavedLocation()
+            if (savedLocation) {
+                console.log('Locatuion: ', savedLocation)
+                setDeliveryLocation(savedLocation)
+            }
         }
 
-    }
+        const handleTransferTab = () => {
+            if (!user) {
+                console.log("Chua dang nhap");
+                nav.navigate('LoginScreen');
+                return;
+            } else {
+                nav.navigate('NewLocationScreen')
+            }
 
-    useEffect(() => {
-        if (isFocused) {
-            getSavedLocation()
-            getAlreadyLocation()
         }
-    }, [isFocused])
 
-    return (
-        <View style={styles.container}>
-            <View>
-                <View style={styles.inputContainer}>
-                    <Icon source="magnify" size={20} color="#666" />
+        useEffect(() => {
+            if (isFocused) {
+                getSavedLocation()
+                getAlreadyLocation()
+            }
+        }, [isFocused])
 
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Tìm vị trí"
-                        value={query}
-                        onChangeText={handleInputChange}
+        return (
+            <View style={styles.container}>
+                <View>
+                    <View style={styles.inputContainer}>
+                        <Icon source="magnify" size={20} color="#666" />
+
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Tìm vị trí"
+                            value={query}
+                            onChangeText={handleInputChange}
+                        />
+                    </View>
+                    <FlatList
+                        data={suggestions}
+                        keyExtractor={(item) => item.place_id}
+                        renderItem={({ item }) => (
+                            <TouchableOpacity style={styles.places} onPress={() => handleSelectLocation(item.place_id)}>
+                                <Icon source="map-marker-outline" size={20} />
+                                <Text style={styles.suggestion}>{item.description}</Text>
+                            </TouchableOpacity>
+                        )}
                     />
                 </View>
-                <FlatList
-                    data={suggestions}
-                    keyExtractor={(item) => item.place_id}
-                    renderItem={({ item }) => (
-                        <TouchableOpacity style={styles.places} onPress={() => handleSelectLocation(item.place_id)}>
-                            <Icon source="map-marker-outline" size={20} />
-                            <Text style={styles.suggestion}>{item.description}</Text>
-                        </TouchableOpacity>
-                    )}
-                />
-            </View>
 
-            {deliveryLocation &&
+                {deliveryLocation &&
 
 
-                <View style={styles.currentLocation}>
-                    <View style={{ flexDirection: 'row', paddingTop: 10 }}>
-                        <Icon source="map-marker-outline" size={25} />
-                        <Text style={{ fontSize: 16, marginHorizontal: 10, fontWeight: '400', width: '75%' }}>
-                            {deliveryLocation.name}
-                        </Text>
-                        <Text style={{ fontSize: 17, paddingHorizontal: 6, color: 'blue', height: 30 }}>Sửa</Text>
-                    </View>
-                    <Text style={{ fontSize: 14, marginHorizontal: 36, fontWeight: '400', width: '75%', color: 'gray' }}>
-                        {deliveryLocation.formattedAddress}
-                    </Text>
-                    <View style={{ flexDirection: 'row', marginLeft: 37, marginTop: 16 }}>
-                        <Text style={{ marginRight: 30, color: 'gray' }}>{deliveryLocation.receiver}</Text>
-                        <Text style={{ marginRight: 30, color: 'gray' }}>{deliveryLocation.phone}</Text>
-
-                    </View>
-                </View>
-            }
-
-            <Text style={{ fontSize: 16, color: 'gray', padding: 10, backgroundColor: '#ccc', }}>Địa chỉ đã lưu</Text>
-            {alreadyLocation && user &&
-                <FlatList
-                    contentContainerStyle={{ paddingBottom: 200 }}
-
-                    data={alreadyLocation}
-                    keyExtractor={(item) => item.id}
-                    renderItem={({ item, index }) => (
-                        <TouchableOpacity style={styles.currentLocation} onPress={() => changeLocation(item.id, index)}>
-                            <View style={{ flexDirection: 'row', paddingTop: 10 }}>
-                                <Icon source="map-marker-outline" size={25} />
-                                <Text style={{ fontSize: 16, marginHorizontal: 10, fontWeight: '400', width: '75%' }}>
-
-                                </Text>
-                                <Text style={{ fontSize: 17, paddingHorizontal: 6, color: 'blue', height: 30 }}>Sửa</Text>
-                            </View>
-                            <Text style={{ fontSize: 14, marginHorizontal: 36, fontWeight: '400', width: '75%', color: 'gray' }}>
-                                {item.address}
+                    <View style={styles.currentLocation}>
+                        <View style={{ flexDirection: 'row', paddingTop: 10 }}>
+                            <Icon source="map-marker-outline" size={25} />
+                            <Text style={{ fontSize: 16, marginHorizontal: 10, fontWeight: '400', width: '75%' }}>
+                                {deliveryLocation.name}
                             </Text>
-                            <View style={{ flexDirection: 'row', marginLeft: 37, marginTop: 16 }}>
-                                <Text style={{ marginRight: 30, color: 'gray' }}>{item.receiver_name}</Text>
-                                <Text style={{ marginRight: 30, color: 'gray' }}>{item.phone_number}</Text>
+                            <Text style={{ fontSize: 17, paddingHorizontal: 6, color: 'blue', height: 30 }}>Sửa</Text>
+                        </View>
+                        <Text style={{ fontSize: 14, marginHorizontal: 36, fontWeight: '400', width: '75%', color: 'gray' }}>
+                            {deliveryLocation.formattedAddress}
+                        </Text>
+                        <View style={{ flexDirection: 'row', marginLeft: 37, marginTop: 16 }}>
+                            <Text style={{ marginRight: 30, color: 'gray' }}>{deliveryLocation.receiver}</Text>
+                            <Text style={{ marginRight: 30, color: 'gray' }}>{deliveryLocation.phone}</Text>
 
-                            </View>
-                        </TouchableOpacity>
-                    )}
-                />
-            }
-            <TouchableOpacity style={styles.addLocation} onPress={handleTransferTab}>
-                <Text style={{ color: '#fff', fontSize: 16 }}>
-                    Thêm địa chỉ
-                </Text>
-            </TouchableOpacity>
-        </View>
-    )
-}
+                        </View>
+                    </View>
+                }
 
-export default LocationDelivery
+                <Text style={{ fontSize: 16, color: 'gray', padding: 10, backgroundColor: '#ccc', }}>Địa chỉ đã lưu</Text>
+                {alreadyLocation && user &&
+                    <FlatList
+                        contentContainerStyle={{ paddingBottom: 200 }}
 
-const styles = StyleSheet.create({
-    addLocation: {
-        position: 'absolute', bottom: 0,
-        padding: 20,
-        backgroundColor: Colors.ShoppeOrange,
-        marginTop: 40,
-        width: '95%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        zIndex: 100,
-        alignSelf: 'center',
-        bottom: 7,
-        borderRadius: 10
-    },
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        position: 'relative',
-    },
-    currentLocation: {
-        height: 130,
-        marginTop: 10,
+                        data={alreadyLocation}
+                        keyExtractor={(item) => item.id}
+                        renderItem={({ item, index }) => (
+                            <TouchableOpacity style={styles.currentLocation} onPress={() => changeLocation(item.id, index)}>
+                                <View style={{ flexDirection: 'row', paddingTop: 10 }}>
+                                    <Icon source="map-marker-outline" size={25} />
+                                    <Text style={{ fontSize: 16, marginHorizontal: 10, fontWeight: '400', width: '75%' }}>
 
-        // backgroundColor: '#ccc',
-        // elevation: 2
-    },
-    input: {
-        height: 40,
-        borderColor: '#ccc',
-        // borderWidth: 1,
-        // borderRadius: 8,
-        // paddingHorizontal: 12,
-        // marginBottom: 1,
-        // backgroundColor: '#fff',
-        width: '95%'
-    },
-    inputContainer: {
-        paddingHorizontal: 8,
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: '#ccc',
-        marginHorizontal: 8,
-        marginTop: 4,
-    },
-    places: {
-        backgroundColor: "#fff",
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingHorizontal: 10
-    },
-    suggestion: {
-        padding: 12,
-        borderBottomColor: '#ddd',
-        borderBottomWidth: 1,
-    },
+                                    </Text>
+                                    <Text style={{ fontSize: 17, paddingHorizontal: 6, color: 'blue', height: 30 }}>Sửa</Text>
+                                </View>
+                                <Text style={{ fontSize: 14, marginHorizontal: 36, fontWeight: '400', width: '75%', color: 'gray' }}>
+                                    {item.address}
+                                </Text>
+                                <View style={{ flexDirection: 'row', marginLeft: 37, marginTop: 16 }}>
+                                    <Text style={{ marginRight: 30, color: 'gray' }}>{item.receiver_name}</Text>
+                                    <Text style={{ marginRight: 30, color: 'gray' }}>{item.phone_number}</Text>
 
-})
+                                </View>
+                            </TouchableOpacity>
+                        )}
+                    />
+                }
+                <TouchableOpacity style={styles.addLocation} onPress={handleTransferTab}>
+                    <Text style={{ color: '#fff', fontSize: 16 }}>
+                        Thêm địa chỉ
+                    </Text>
+                </TouchableOpacity>
+            </View>
+        )
+    }
+
+    export default LocationDelivery
+
+    const styles = StyleSheet.create({
+        addLocation: {
+            position: 'absolute',
+            padding: 20,
+            backgroundColor: Colors.ShoppeOrange,
+            // marginTop: 80,
+            width: '95%',
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex: 100,
+            alignSelf: 'center',
+            bottom: 30,
+            borderRadius: 10
+        },
+        container: {
+            flex: 1,
+            backgroundColor: '#fff',
+            position: 'relative',
+        },
+        currentLocation: {
+            height: 130,
+            marginTop: 10,
+
+            // backgroundColor: '#ccc',
+            // elevation: 2
+        },
+        input: {
+            height: 40,
+            borderColor: '#ccc',
+            // borderWidth: 1,
+            // borderRadius: 8,
+            // paddingHorizontal: 12,
+            // marginBottom: 1,
+            // backgroundColor: '#fff',
+            width: '95%'
+        },
+        inputContainer: {
+            paddingHorizontal: 8,
+            flexDirection: 'row',
+            alignItems: 'center',
+            backgroundColor: '#ccc',
+            marginHorizontal: 8,
+            marginTop: 4,
+        },
+        places: {
+            backgroundColor: "#fff",
+            flexDirection: 'row',
+            alignItems: 'center',
+            paddingHorizontal: 10
+        },
+        suggestion: {
+            padding: 12,
+            borderBottomColor: '#ddd',
+            borderBottomWidth: 1,
+        },
+
+    })

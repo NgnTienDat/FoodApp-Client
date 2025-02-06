@@ -42,7 +42,7 @@ const OrderTabs = ({ status }) => {
             <Text style={styles.subPrice}>
                 <PriceFormatter price={item.food.price} />
             </Text>
-            {status === 'Đã giao hàng' && item.evaluated === false && (
+            {status === 'Đã giao' && item.evaluated === false && (
                 <TouchableOpacity style={styles.evaluation}
                     onPress={() => nav.navigate('EvaluationScreen', { "order": item })}
                 >
@@ -111,7 +111,7 @@ const OrderScreen = () => {
         { name: "Chờ xác nhận", component: () => <OrderTabs status="Chờ xác nhận" /> },
         { name: "Đã xác nhận", component: () => <OrderTabs status="Đã xác nhận" /> },
         { name: "Đang giao hàng", component: () => <OrderTabs status="Đang giao hàng" /> },
-        { name: "Đã giao hàng", component: () => <OrderTabs status="Đã giao hàng" /> },
+        { name: "Đã giao hàng", component: () => <OrderTabs status="Đã giao" /> },
         { name: "Đã hủy", component: () => <OrderTabs status="Đã hủy" /> },
 
     ];
